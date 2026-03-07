@@ -11,8 +11,7 @@ export default defineConfig({
   site: "https://kautilya.pro",
   output: "server",
   adapter: cloudflare({
-    imageService:
-      process.env.NODE_ENV === "development" ? "passthrough" : "cloudflare",
+    imageService: "compile",
   }),
   env: {
     schema: {

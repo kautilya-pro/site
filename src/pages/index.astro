@@ -21,17 +21,17 @@ for (const post of posts) {
 
 // Ensure code-and-chaos is prominent
 const codeAndChaosPosts = seriesMap.get('code-and-chaos') || [];
+
+export const prerender = true;
+
 ---
 
 <BaseLayout title="Home" description={SITE_DESCRIPTION}>
 	<!-- Hero / Bio -->
 	<section class="bio-section">
-		<Image src={avatarImg} alt="Kautilya Bhardwaj profile avatar" class="hero-avatar" loading="eager" />
-		<h1 class="hero-title">The Architecture of the Unseen.</h1>
+<Image src={avatarImg} alt="Kautilya Bhardwaj profile avatar" class="hero-avatar" width={240} height={240} loading="eager" />
+		<h1 class="hero-title">Hi, I’m Kautilya Bhardwaj.</h1>
 		<div class="bio-content prose">
-			<p>
-				Hi, I’m <strong>Kautilya Bhardwaj</strong>.
-			</p>
 			<p>
 				For over a decade, my craft has been the architecture of the unseen—engineering the silent, high-performance engines that keep the digital world turning. But my curiosity rarely stops at the terminal's edge. To me, the world is a symphony of interlocking systems, waiting to be understood. Whether I am tuning a microservice, untangling the grand tapestry of macroeconomic shifts, calibrating the rhythms of personal finance and health, or simply getting lost in the quiet narratives of a profound book or film, I am always searching for the underlying structure.
 			</p>
