@@ -46,6 +46,9 @@ const { title, description, date, updatedDate, series, permalinkSlug, headings }
 		/>
 	</head>
 	<body>
+		<!-- Scroll-driven reading progress bar -->
+		<div class="reading-progress-bar" aria-hidden="true"></div>
+
 		<Header />
 		<div class="article-grid">
 			<article class="article-content">
@@ -90,7 +93,7 @@ const { title, description, date, updatedDate, series, permalinkSlug, headings }
 				<hr class="article-divider" />
 
 				<!-- Article Body -->
-				<div class="prose">
+				<div id="article-body" class="prose">
 					<slot />
 				</div>
 
@@ -128,6 +131,38 @@ const { title, description, date, updatedDate, series, permalinkSlug, headings }
 </html>
 
 <style>
+	/* ──────────────────────────────────────────────────────────
+	 * READING EXPERIENCE — Scoped Theme-Aware Palette
+	 * Uses color-scheme + light-dark() scoped to the article
+	 * container so it does NOT affect header/footer/site chrome.
+	 * ────────────────────────────────────────────────────────── */
+
+	/* ── Scroll-Driven Progress Bar ── */
+	@keyframes progress-grow {
+		from {
+			transform: scaleX(0);
+		}
+		to {
+			transform: scaleX(1);
+		}
+	}
+
+	.reading-progress-bar {
+		position: fixed;
+		top: 0;
+		inset-inline: 0;
+		height: 3px;
+		background: light-dark(#2563eb, #60a5fa);
+		transform-origin: left;
+		transform: scaleX(0);
+		z-index: 9999;
+
+		/* Scroll-driven animation (Chromium 115+, graceful degradation) */
+		animation: progress-grow linear;
+		animation-timeline: scroll(root);
+	}
+
+	/* ── Grid Layout ── */
 	.article-grid {
 		display: grid;
 		grid-template-columns: 1fr 250px;
@@ -137,11 +172,39 @@ const { title, description, date, updatedDate, series, permalinkSlug, headings }
 		padding: 3rem 1.5rem;
 	}
 
+	/* ── Article Container — Theme-Aware Reading Surface ── */
 	.article-content {
+		color-scheme: light dark;
+
+		/* Reading palette (scoped) */
+		--reading-bg: light-dark(#fdfdfc, #1a1a1a);
+		--reading-fg: light-dark(#2c2c2c, #e0e0e0);
+		--reading-muted: light-dark(#595959, #9e9e9e);
+		--reading-accent: light-dark(#2563eb, #60a5fa);
+		--reading-accent-tint: light-dark(
+			rgba(37, 99, 235, 0.08),
+			rgba(96, 165, 250, 0.1)
+		);
+		--reading-border: light-dark(
+			rgba(0, 0, 0, 0.08),
+			rgba(255, 255, 255, 0.08)
+		);
+
 		min-width: 0;
-		max-width: 100%;
+		max-width: 65ch;
+		margin-inline: auto;
+
+		/* Solid background — NO textures, NO background-image */
+		background-color: var(--reading-bg);
+		background-image: none !important;
+		color: var(--reading-fg);
+
+		/* Subtle padding to visually separate from grid texture */
+		padding: 2rem 2.5rem;
+		border-radius: 12px;
 	}
 
+	/* ── Article Header ── */
 	.article-header {
 		margin-bottom: 2rem;
 	}
@@ -154,77 +217,144 @@ const { title, description, date, updatedDate, series, permalinkSlug, headings }
 		flex-wrap: wrap;
 	}
 
-
 	.meta-separator {
-		color: var(--color-ink-faint);
+		color: var(--reading-muted);
 	}
 
 	.updated-label {
 		font-family: var(--font-mono);
 		font-size: 0.8125rem;
-		color: var(--color-ink-muted);
+		color: var(--reading-muted);
 		font-style: italic;
 	}
 
 	.article-title {
+		font-family: 'Inter', var(--font-sans);
 		font-size: 2.5rem;
 		line-height: 1.15;
 		margin-bottom: 0.75rem;
 		letter-spacing: -0.025em;
+		color: var(--reading-fg);
+		text-wrap: balance;
 	}
 
 	.article-description {
-		font-family: var(--font-serif);
+		font-family: 'Lora', var(--font-serif);
 		font-size: 1.125rem;
-		color: var(--color-ink-muted);
+		color: var(--reading-muted);
 		line-height: 1.6;
 		margin: 0;
 	}
 
 	.article-divider {
 		border: none;
-		border-top: 1px solid var(--color-border);
+		border-top: 1px solid var(--reading-border);
 		margin: 2.5rem 0;
 	}
 
+	/* ── Prose — Typography & Rhythm ── */
+	.prose {
+		font-family: 'Lora', var(--font-serif);
+		font-size: clamp(1.125rem, 1vw + 1rem, 1.25rem);
+		line-height: 1.75;
+		color: var(--reading-fg);
+
+		/* Override Tailwind Typography prose vars */
+		--tw-prose-body: var(--reading-fg);
+		--tw-prose-headings: var(--reading-fg);
+		--tw-prose-links: var(--reading-accent);
+		--tw-prose-bold: var(--reading-fg);
+		--tw-prose-code: var(--reading-accent);
+		--tw-prose-quotes: var(--reading-muted);
+		--tw-prose-quote-borders: var(--reading-accent);
+		--tw-prose-counters: var(--reading-muted);
+		--tw-prose-bullets: var(--reading-muted);
+		--tw-prose-hr: var(--reading-border);
+	}
+
+	/* Headings: Inter sans-serif */
+	.prose :where(h1, h2, h3, h4, h5, h6) {
+		font-family: 'Inter', var(--font-sans);
+		color: var(--reading-fg);
+	}
+
+	.prose :where(h1, h2, h3) {
+		text-wrap: balance;
+	}
+
+	/* Paragraphs */
+	.prose :where(p) {
+		text-wrap: pretty;
+	}
+
+	/* Links */
+	.prose :where(a) {
+		color: var(--reading-accent);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		text-decoration-color: var(--reading-accent-tint);
+		transition: text-decoration-color 0.2s var(--ease-out-expo);
+	}
+
+	.prose :where(a:hover) {
+		text-decoration-color: var(--reading-accent);
+	}
+
+	/* ── Drop Cap — First paragraph + first paragraph after h2 ── */
+	.prose > p:first-of-type::first-letter,
+	.prose > h2 + p::first-letter {
+		font-family: 'Inter', var(--font-sans);
+		float: left;
+		font-size: 3.2em;
+		line-height: 0.85;
+		padding-right: 0.08em;
+		margin-top: 0.05em;
+		font-weight: 700;
+		color: var(--reading-accent);
+	}
+
+	/* ── Blockquotes — Rich styling ── */
+	.prose :where(blockquote) {
+		border-left: 4px solid var(--reading-accent);
+		background: var(--reading-accent-tint);
+		padding: 1rem 1.25rem;
+		margin: 1.75rem 0;
+		border-radius: 0 8px 8px 0;
+		font-style: italic;
+		color: var(--reading-muted);
+	}
+
+	.prose :where(blockquote p) {
+		margin: 0;
+	}
+
+	/* ── Sidebar ── */
 	.article-sidebar {
 		display: block;
 	}
 
-	/* Comments */
+	/* ── Comments ── */
 	.comments-section {
 		margin-top: 1rem;
 	}
 
 	.comments-title {
+		font-family: 'Inter', var(--font-sans);
 		font-size: 1.25rem;
 		margin-bottom: 1rem;
+		color: var(--reading-fg);
 	}
 
-	.comments-placeholder {
-		border: 1px dashed var(--color-border-subtle);
-		border-radius: 8px;
-		padding: 1.5rem;
-		text-align: center;
-	}
-
-	.comments-placeholder p {
-		font-family: var(--font-mono);
-		font-size: 0.8125rem;
-		color: var(--color-ink-muted);
-		margin: 0.25rem 0;
-	}
-
-	.comments-hint {
-		color: var(--color-ink-faint) !important;
-		font-size: 0.75rem !important;
-	}
-
-	/* Responsive */
+	/* ── Responsive ── */
 	@media (max-width: 1024px) {
 		.article-grid {
 			grid-template-columns: 1fr;
 			padding: 2rem 1rem;
+		}
+
+		.article-content {
+			padding: 1.5rem 1rem;
+			border-radius: 0;
 		}
 
 		.article-sidebar {

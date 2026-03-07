@@ -8,8 +8,7 @@
  * ────────────────────────────────────────────────────────
  */
 
-/* ── Google Fonts (must come before Tailwind @import) ── */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Fira+Code:wght@400;500&display=swap");
+/* ── Google Fonts loaded via <link> tags in BaseHead.astro ── */
 
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
