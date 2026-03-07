@@ -87,6 +87,7 @@
     line-height: 1.25;
     margin: 0 0 0.5rem 0;
     font-weight: 700;
+    scroll-margin-top: 5rem;
   }
 
   h1 {
@@ -210,6 +211,7 @@
 
 .prose :where(h1, h2, h3, h4, h5, h6) {
   font-family: var(--font-serif);
+  scroll-margin-top: 5rem;
 }
 
 .prose :where(code) {

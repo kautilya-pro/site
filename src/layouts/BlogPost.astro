@@ -126,6 +126,10 @@ const { title, description, date, updatedDate, series, permalinkSlug, headings }
 				<TableOfContents headings={headings} />
 			</aside>
 		</div>
+		
+		<!-- Mobile TOC Drawer (Placed outside the grid so it's not hidden by the responsive sidebar logic) -->
+		<TableOfContents headings={headings} />
+		
 		<Footer />
 	</body>
 </html>
