@@ -1,0 +1,383 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_DESCRIPTION, AUTHOR_GITHUB, AUTHOR_TWITTER, AUTHOR_LINKEDIN } from '../consts';
+import avatarImg from '../assets/Kautilya-Bhardwaj.jpg';
+
+const posts = (await getCollection('blog'))
+	.filter((post) => !post.data.draft)
+	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Group posts by series
+const seriesMap = new Map<string, typeof posts>();
+for (const post of posts) {
+	const series = post.data.series;
+	if (!seriesMap.has(series)) {
+		seriesMap.set(series, []);
+	}
+	seriesMap.get(series)!.push(post);
+}
+
+// Ensure code-and-chaos is prominent
+const codeAndChaosPosts = seriesMap.get('code-and-chaos') || [];
+---
+
+<BaseLayout title="Home" description={SITE_DESCRIPTION}>
+	<!-- Hero / Bio -->
+	<section class="bio-section">
+		<Image src={avatarImg} alt="Kautilya Bhardwaj profile avatar" class="hero-avatar" loading="eager" />
+		<h1 class="hero-title">The Architecture of the Unseen.</h1>
+		<div class="bio-content prose">
+			<p>
+				Hi, I’m <strong>Kautilya Bhardwaj</strong>.
+			</p>
+			<p>
+				For over a decade, my craft has been the architecture of the unseen—engineering the silent, high-performance engines that keep the digital world turning. But my curiosity rarely stops at the terminal's edge. To me, the world is a symphony of interlocking systems, waiting to be understood. Whether I am tuning a microservice, untangling the grand tapestry of macroeconomic shifts, calibrating the rhythms of personal finance and health, or simply getting lost in the quiet narratives of a profound book or film, I am always searching for the underlying structure.
+			</p>
+			<p>
+				This space is a revival of the un-niched, early web—a digital canvas for genuine curiosity and the art of figuring things out.
+			</p>
+			<p>
+				Welcome.
+			</p>
+		</div>
+	</section>
+
+	<!-- Linktree -->
+	<section class="links-section">
+		<h2 class="section-title">Let's Connect</h2>
+		<div class="links-stack">
+			<a
+				href={AUTHOR_GITHUB}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="link-pill"
+			>
+				<svg
+					viewBox="0 0 16 16"
+					fill="currentColor"
+					width="20"
+					height="20"
+					aria-hidden="true"
+				>
+					<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+				</svg>
+				<span>GitHub</span>
+			</a>
+
+			<a
+				href={AUTHOR_LINKEDIN}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="link-pill"
+			>
+				<svg
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					width="20"
+					height="20"
+					aria-hidden="true"
+				>
+					<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+				</svg>
+				<span>LinkedIn</span>
+			</a>
+
+			<a
+				href={AUTHOR_TWITTER}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="link-pill"
+			>
+				<svg
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					width="20"
+					height="20"
+					aria-hidden="true"
+				>
+					<path
+						d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+					></path>
+				</svg>
+				<span>X (Twitter)</span>
+			</a>
+
+			<a
+				href="https://buymeacoffee.com/kautilya.pro"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="link-pill"
+			>
+				<svg
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					width="20"
+					height="20"
+					aria-hidden="true"
+				>
+					<path d="M20.216 6.415l-.132-.666c-.119-.598-.388-1.163-1.001-1.379-.197-.069-.42-.098-.57-.241-.152-.143-.196-.366-.231-.572-.065-.378-.125-.756-.192-1.133-.057-.325-.102-.69-.25-.987-.195-.4-.597-.634-.996-.788a5.723 5.723 0 00-.626-.194c-1-.263-2.05-.36-3.077-.416a25.834 25.834 0 00-3.7.062c-.915.083-1.88.184-2.75.5-.318.116-.646.256-.888.501-.297.302-.393.77-.177 1.146.154.267.415.456.692.58.36.162.737.284 1.123.366 1.075.238 2.189.331 3.287.37 1.218.05 2.437.01 3.65-.118.299-.033.598-.073.896-.119.352-.054.578-.513.474-.834-.124-.383-.457-.531-.834-.473-.466.074-.96.108-1.382.146-1.177.08-2.358.082-3.536.006a22.228 22.228 0 01-1.157-.107c-.086-.01-.18-.025-.258-.036-.243-.036-.484-.08-.724-.13-.111-.027-.111-.185 0-.212h.005c.277-.06.557-.108.838-.147h.002c.131-.009.263-.032.394-.048a25.076 25.076 0 013.426-.12c.674.019 1.347.067 2.017.144l.228.031c.267.04.533.088.798.145.392.085.895.113 1.07.542.055.137.08.288.111.431l.319 1.484a.237.237 0 01-.199.284h-.003c-.037.006-.075.01-.112.015a36.704 36.704 0 01-4.743.295 37.059 37.059 0 01-4.699-.304c-.14-.017-.293-.042-.417-.06-.326-.048-.649-.108-.973-.161-.393-.065-.768-.032-1.123.161-.29.16-.527.404-.675.701-.154.316-.199.66-.267 1-.069.34-.176.707-.135 1.056.087.753.613 1.365 1.37 1.502a39.69 39.69 0 0011.343.376.483.483 0 01.535.53l-.071.697-1.018 9.907c-.041.41-.047.832-.125 1.237-.122.637-.553 1.028-1.182 1.171-.577.131-1.165.2-1.756.205-.656.004-1.305-.061-1.938-.188-.297-.06-.588-.139-.876-.232-.187-.06-.348-.153-.498-.264-.04-.03-.087-.098-.049-.152l.146-.243a.507.507 0 01.415-.263h.001a2.61 2.61 0 001.087-.168.577.577 0 00.334-.42c.063-.378-.224-.622-.536-.768a4.484 4.484 0 00-.866-.318 11.534 11.534 0 00-2.14-.243l-.063-.002c-.564.003-1.127.053-1.68.155-.247.046-.5.101-.711.223-.28.162-.428.461-.29.76.095.207.27.38.478.497.297.17.635.269.973.335a12.95 12.95 0 001.073.158l.077.01c-.02.165-.038.289-.053.377-.023.132-.17.223-.296.203a13.98 13.98 0 01-2.29-.678c-.542-.218-1.058-.482-1.491-.868-.455-.403-.761-.94-.9-1.531-.051-.22-.076-.446-.076-.672 0-.191.013-.366.04-.563.039-.285.121-.564.225-.832.113-.292.24-.577.399-.841.075-.122.156-.251.238-.37.047-.065.135-.134.145-.141a6.71 6.71 0 01.546-.344 8.108 8.108 0 011.15-.506c.37-.124.748-.217 1.132-.273a8.517 8.517 0 011.322-.098c.463.003.922.049 1.375.133.348.064.691.154 1.024.269.387.137.764.3 1.118.502.292.166.575.355.828.581.245.22.457.476.611.78.093.184.146.39.146.602 0 .26-.087.479-.219.666a1.694 1.694 0 01-.474.405 2.82 2.82 0 01-.649.269 3.87 3.87 0 01-.648.12l-.014.001h-.002z"></path>
+				</svg>
+				<span>Buy Me a Coffee</span>
+			</a>
+		</div>
+	</section>
+
+	<!-- Current Focus (/now) -->
+	<section class="now-section">
+		<div class="now-terminal">
+			<div class="command-line">
+				<span class="prompt">&gt;</span> systemctl status kautilya.pro
+			</div>
+			<div class="terminal-output mt-4">
+				<p class="font-mono text-sm text-[var(--color-ink)] mb-3">
+					Current Focus ({new Date().toLocaleString('en-US', { month: 'long' })} {new Date().getFullYear()}):
+				</p>
+				<ul class="focus-list space-y-3 font-mono text-sm list-none p-0 m-0 text-[var(--color-ink-muted)]">
+					<li class="flex items-start gap-2">
+						<span class="emoji mt-[2px]">☸️</span> 
+						<span>Deep-diving into Kubernetes administration for my CKA certification.</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="emoji mt-[2px]">📝</span> 
+						<span>Drafting Chapter 2 of Code and Chaos.</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+
+	<!-- Posts / Featured Writing -->
+	<section id="writing" class="posts-section border-t border-[var(--color-border)] mt-12 pt-8">
+		<h2 class="section-title">Featured Writing</h2>
+		
+		<div class="series-group">
+			<h3 class="series-heading">
+				<a href="/code-and-chaos/" class="series-label hover:underline text-lg">Code and Chaos</a>
+			</h3>
+			<p class="series-description font-sans text-[var(--color-ink-muted)] leading-relaxed mb-6">
+				A series of IYKYK satirical takes on the architectural trade-offs we make while building software systems. There's a plenty full of such eureka moments hidden. Try to <em class="font-semibold text-[var(--color-ink)]">catch 'em all!</em>
+			</p>
+
+			{codeAndChaosPosts.length > 0 && (
+				<ul class="post-list">
+					<li class="post-item">
+						<a
+							href={`/${codeAndChaosPosts[0].data.series}/${codeAndChaosPosts[0].data.permalinkSlug}/`}
+							class="post-link"
+						>
+							<div class="post-info">
+								<h4 class="post-title">Chapter 01: {codeAndChaosPosts[0].data.title} &rarr;</h4>
+							</div>
+						</a>
+					</li>
+				</ul>
+			)}
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	/* Layout Basics */
+	.bio-section {
+		padding: 4rem 0 0 0;
+		max-width: var(--width-prose);
+	}
+
+	.hero-avatar {
+		border-radius: 50%;
+		display: block;
+		margin-bottom: 2rem;
+		width: 120px;
+		height: 120px;
+		border: 2px solid var(--color-border);
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	}
+
+	.hero-title {
+		font-family: var(--font-serif);
+		font-size: 2rem;
+		font-weight: 700;
+		color: var(--color-ink);
+		margin-bottom: 1.5rem;
+		line-height: 1.2;
+	}
+
+	.bio-content {
+		margin-bottom: 2rem;
+	}
+
+	/* Section titles */
+	.section-title {
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.15em;
+		color: var(--color-ink-faint);
+		margin-bottom: 1.5rem;
+		padding-bottom: 0.75rem;
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	/* Linktree-style links */
+	.links-section {
+		max-width: var(--width-prose);
+		margin-bottom: 4rem;
+	}
+
+	.links-stack {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.link-pill {
+		display: flex;
+		align-items: center;
+		gap: 0.875rem;
+		padding: 1rem 1.25rem;
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		background-color: var(--color-canvas-raised);
+		color: var(--color-ink);
+		text-decoration: none;
+		font-family: var(--font-sans);
+		font-size: 0.9375rem;
+		font-weight: 500;
+		transition:
+			border-color 0.2s ease,
+			background-color 0.2s ease,
+			transform 0.15s ease;
+	}
+
+	.link-pill:hover {
+		border-color: var(--color-accent);
+		background-color: var(--color-canvas-subtle);
+		color: var(--color-ink);
+		transform: translateY(-2px);
+	}
+
+	.link-pill svg {
+		flex-shrink: 0;
+		color: var(--color-ink-muted);
+		transition: color 0.2s ease;
+	}
+
+	.link-pill:hover svg {
+		color: var(--color-accent);
+	}
+
+	/* Now Section */
+	.now-section {
+		padding: 2rem 0;
+		max-width: var(--width-prose);
+	}
+
+	.now-terminal {
+		background-color: var(--color-canvas-raised);
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		padding: 1.5rem;
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	}
+
+	.command-line {
+		font-family: var(--font-mono);
+		font-size: 0.9375rem;
+		color: var(--color-ink-muted);
+		border-bottom: 1px solid var(--color-border);
+		padding-bottom: 1rem;
+	}
+
+	.command-line .prompt {
+		color: var(--color-accent);
+		margin-right: 0.5rem;
+		font-weight: bold;
+	}
+
+	.emoji {
+		font-size: 1.1rem;
+		min-width: 24px;
+		display: inline-block;
+		text-align: center;
+	}
+
+	/* Posts */
+	.posts-section {
+		padding: 2rem 0;
+		max-width: var(--width-prose);
+	}
+
+	.series-group {
+		margin-bottom: 3rem;
+	}
+
+	.series-heading {
+		font-family: var(--font-mono);
+		font-weight: 600;
+		margin-bottom: 0.5rem;
+	}
+
+	.series-label {
+		color: var(--color-accent);
+		text-transform: capitalize;
+	}
+
+	.post-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.post-item {
+		margin-bottom: 0;
+	}
+
+	.post-link {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 2rem;
+		padding: 1rem 0;
+		text-decoration: none;
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		background-color: var(--color-canvas-raised);
+		transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+		padding: 1.25rem;
+		margin-top: 1rem;
+	}
+
+	.post-link:hover {
+		background-color: var(--color-canvas-subtle);
+		border-color: var(--color-accent);
+		transform: translateY(-2px);
+	}
+
+	.post-info {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.post-title {
+		font-family: var(--font-sans);
+		font-size: 1.1rem;
+		font-weight: 600;
+		color: var(--color-ink);
+		margin: 0;
+		line-height: 1.35;
+	}
+
+	.post-link:hover .post-title {
+		color: var(--color-accent);
+	}
+
+	@media (max-width: 640px) {
+		.post-link {
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+	}
+</style>

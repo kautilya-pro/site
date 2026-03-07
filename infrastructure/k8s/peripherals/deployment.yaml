@@ -1,0 +1,53 @@
+# Peripheral Infrastructure — CKA Practice
+#
+# This directory holds Kubernetes manifests for self-hosted
+# microservices that will integrate with the blog (analytics,
+# webhooks, etc.). These will be deployed to a separate cluster
+# from the Cloudflare Pages blog.
+#
+# Example: blog-metrics-api — a hypothetical Go/Python service
+# for custom analytics aggregation.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-metrics-api
+  namespace: peripherals
+  labels:
+    app: blog-metrics-api
+    part-of: kautilya-pro-site
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog-metrics-api
+  template:
+    metadata:
+      labels:
+        app: blog-metrics-api
+    spec:
+      containers:
+        - name: blog-metrics-api
+          image: ghcr.io/kautilya/blog-metrics-api:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 5

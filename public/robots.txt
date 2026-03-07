@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kautilya.pro/sitemap-index.xml
