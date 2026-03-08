@@ -16,7 +16,7 @@ heroImage: ./populist-deep-state-hero.png
 
 ![The Populist and the Deep State](./populist-deep-state-hero.png)
 
-If you want to understand why your brand-new AI agent just confidently hallucinated a command that wiped your production database, you have to look at how we govern our code.
+If you want to understand why your brand-new AI agent might confidently hallucinate a command that can potentially wipe your production database, you have to look at how we govern our code and systems.
 
 We have a bad habit of falling in love with charismatic frontmen who promise to cut the red tape.
 
