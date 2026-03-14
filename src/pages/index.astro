@@ -7,7 +7,7 @@ import avatarImg from '../assets/Kautilya-Bhardwaj.jpg';
 
 const posts = (await getCollection('blog'))
 	.filter((post) => !post.data.draft)
-	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+	.sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
 
 // Group posts by series
 const seriesMap = new Map<string, typeof posts>();
@@ -162,16 +162,23 @@ export const prerender = true;
 
 			{codeAndChaosPosts.length > 0 && (
 				<ul class="post-list">
-					<li class="post-item">
-						<a
-							href={`/${codeAndChaosPosts[0].data.series}/${codeAndChaosPosts[0].data.permalinkSlug}/`}
-							class="post-link"
-						>
-							<div class="post-info">
-								<h4 class="post-title">Chapter 01: {codeAndChaosPosts[0].data.title} &rarr;</h4>
-							</div>
-						</a>
-					</li>
+					{codeAndChaosPosts.map((post, index) => {
+						// This dynamically creates "01", "02", etc. based on the array position
+						const chapterNumber = String(index + 1).padStart(2, '0');
+						
+						return (
+							<li class="post-item">
+								<a
+									href={`/${post.data.series}/${post.data.permalinkSlug}/`}
+									class="post-link"
+								>
+									<div class="post-info">
+										<h4 class="post-title">Chapter {chapterNumber}: {post.data.title} &rarr;</h4>
+									</div>
+								</a>
+							</li>
+						);
+					})}
 				</ul>
 			)}
 		</div>

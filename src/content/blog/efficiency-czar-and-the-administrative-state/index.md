@@ -183,7 +183,7 @@ Friction is successfully restored. We didn't make the Frontman smarter. We didn'
 
 We took the most powerful artificial brain in human history, and we forced it to fill out paperwork.
 
-### The Final Sign-Off: The Paradox of the Assembly Line
+## The Final Sign-Off: The Paradox of the Assembly Line
 
 As you sit back at your kitchen table, still staring at the glowing red "REJECT" button on your screen, the adrenaline slowly fades. It is replaced by a profound, cynical realization about the sprawling architecture you just built.
 
