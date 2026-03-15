@@ -21,7 +21,7 @@ This repository hosts the personal digital hub for [kautilya.pro](https://kautil
 
 - **Near-zero client JS**: Astro ships no framework JavaScript. Blog content is pre-rendered HTML/CSS. Minimal client JS is used for the Table of Contents scroll-spy and third-party embeds (Giscus, GA).
 - **Content Collections with Zod**: Frontmatter is validated against Zod schemas (`src/content.config.ts`) at build time. The schema enforces `title`, `description`, `date`, `series`, `permalinkSlug`, `heroImage`, and `draft` fields.
-- **Vite-native**: Astro 8 builds on Vite 7, providing high-performance bundling.
+- **Vite-native**: Astro 6 builds on Vite 7, providing high-performance bundling.
 
 **Cloudflare Pages** is the hosting target:
 

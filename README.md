@@ -53,7 +53,7 @@ graph LR
 
 | Layer     | Technology                                       | Version                  |
 | --------- | ------------------------------------------------ | ------------------------ |
-| Framework | [Astro](https://astro.build)                     | `6.x` (beta)             |
+| Framework | [Astro](https://astro.build)                     | `6.x`                    |
 | Bundler   | [Vite](https://vite.dev)                         | `7.x`                    |
 | Hosting   | [Cloudflare Pages](https://pages.cloudflare.com) | `workerd` edge (Hybrid)  |
 | Styling   | [Tailwind CSS](https://tailwindcss.com)          | `4.x`                    |
