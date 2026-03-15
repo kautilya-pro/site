@@ -2,6 +2,7 @@
 title: "The Efficiency Czar and the Assembly Line"
 description: "How the data engineering trauma of 2012 forced modern AI to fill out paperwork."
 date: 2026-03-15
+updatedDate: 2026-03-15
 series: code-and-chaos
 permalinkSlug: the-efficiency-czar-and-the-assemly-line
 tags:
@@ -14,7 +15,6 @@ heroImage: ./efficiency-czar-assembly-line-hero.png
 
 > **TL;DR:** _We spent a decade learning that unsupervised, single-shot cron jobs silently poison databases, yet we just handed our entire cloud infrastructure to a hyper-confident AI agent operating purely on vibes. Discover why open-ended prompts are a loaded gun, and why forcing your AI to fill out paperwork is the only mathematical shape of safe intelligence._
 
-![The Efficiency Czar and the Assembly Line](./efficiency-czar-assembly-line-hero.png)
 
 It is a Tuesday in March, and you are staring at the AWS billing dashboard. The line graph is trending upward at an aggressive, unforgiving angle, driven by the sprawling, untamed microservice architecture your team built over the last three years.
 

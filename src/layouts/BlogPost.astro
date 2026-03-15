@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import TableOfContents from '../components/TableOfContents.astro';
+import { Image } from 'astro:assets';
 import {
 	PUBLIC_GISCUS_REPO,
 	PUBLIC_GISCUS_REPO_ID,
@@ -25,10 +26,11 @@ interface Props {
 	updatedDate?: Date;
 	series: string;
 	permalinkSlug: string;
+	heroImage?: ImageMetadata;
 	headings: Heading[];
 }
 
-const { title, description, date, updatedDate, series, permalinkSlug, headings } = Astro.props;
+const { title, description, date, updatedDate, series, permalinkSlug, heroImage, headings } = Astro.props;
 ---
 
 <!doctype html>
@@ -89,6 +91,19 @@ const { title, description, date, updatedDate, series, permalinkSlug, headings }
 						}
 					</div>
 				</header>
+
+				{heroImage && (
+					<div class="article-hero-image mb-8">
+						<Image 
+							src={heroImage} 
+							alt={`Hero image for ${title}`} 
+							class="w-full h-auto rounded-xl shadow-sm border border-[var(--color-border)]" 
+							loading="eager" 
+							fetchpriority="high" 
+							decoding="async"
+						/>
+					</div>
+				)}
 
 				<hr class="article-divider" />
 

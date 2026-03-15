@@ -5,6 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import cloudflare from "@astrojs/cloudflare";
 import partytown from "@astrojs/partytown";
 import tailwindcss from "@tailwindcss/vite";
+import svgo from "vite-plugin-svgo";
 
 // https://astro.build/config
 export default defineConfig({
@@ -46,6 +47,20 @@ export default defineConfig({
     }),
   ],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [
+      tailwindcss(),
+      svgo({
+        plugins: [
+          {
+            name: "preset-default",
+            params: {
+              overrides: {
+                removeViewBox: false,
+              },
+            },
+          },
+        ],
+      }),
+    ],
   },
 });
