@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
+import NewsletterForm from '../../components/NewsletterForm.astro';
 
 const posts = (await getCollection('blog'))
 	.filter((post) => !post.data.draft && post.data.series === 'code-and-chaos')
@@ -78,6 +79,11 @@ export const prerender = true;
 					<span>The Unvetted Appointee (IAM & Root Keys) <span class="status-badge bg-yellow-500/10 text-yellow-600 border border-yellow-500/20">Drafting</span></span>
 				</li>
 			</ul>
+		</section>
+
+		<!-- Subscribe CTA -->
+		<section class="series-subscribe mt-16 p-8 bg-[var(--color-canvas-raised)] border border-[var(--color-border)] rounded-xl">
+			<NewsletterForm />
 		</section>
 	</div>
 </BaseLayout>

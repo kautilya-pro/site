@@ -7,9 +7,10 @@ interface Heading {
 
 interface Props {
 	headings: Heading[];
+	type?: 'desktop' | 'mobile' | 'both';
 }
 
-const { headings } = Astro.props;
+const { headings, type = 'both' } = Astro.props;
 const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
@@ -17,6 +18,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 	tocHeadings.length > 0 && (
 		<>
 			{/* Desktop Sidebar TOC */}
+			{type !== 'mobile' && (
 			<nav aria-label="Table of Contents (Desktop)" class="toc-desktop">
 				<label for="reading-mode" class="toc-reading-toggle" aria-label="Toggle reading mode">
 					<span aria-hidden="true">📖</span>
@@ -48,8 +50,10 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 					</ul>
 				</div>
 			</nav>
+			)}
 
 			{/* Mobile Floating Capsule (TOC & Back to Top) and Bottom Drawer */}
+			{type !== 'desktop' && (
 			<div class="toc-mobile-container">
 				<!-- Modern Floating Capsule -->
 				<div class="toc-mobile-capsule">
@@ -127,11 +131,16 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 					</div>
 				</nav>
 			</div>
+			)}
 		</>
 	)
 }
 
 <script is:inline>
+(() => {
+	if (window.__toc_initialized) return;
+	window.__toc_initialized = true;
+
 	function setupScrollSpy() {
 		const headings = Array.from(document.querySelectorAll('.prose h2, .prose h3'));
 		const tocLinks = document.querySelectorAll('.toc-link');
@@ -258,6 +267,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 	} else {
 		document.addEventListener('DOMContentLoaded', init);
 	}
+})();
 </script>
 
 <style>

@@ -10,3 +10,11 @@ export const AUTHOR_LINKEDIN = 'https://linkedin.com/in/kautilya-pro';
 export const AUTHOR_TWITTER = 'https://x.com/kautilya_pro';
 export const AUTHOR_TWITTER_HANDLE = '@kautilya_pro';
 export const SITE_REPO_URL = 'https://github.com/kautilya-pro/site';
+
+// Support & Tipping
+export const BUY_ME_A_COFFEE_URL = 'https://buymeacoffee.com/kautilya.pro';
+export const GUMROAD_URL = 'https://kautilyapro.gumroad.com';
+
+// Newsletter form Turnstile Site Key (Update in your Cloudflare dashboard)
+// Use the dummy key for local testing (always passes)
+export { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';

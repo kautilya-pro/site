@@ -1,0 +1,196 @@
+---
+import { PUBLIC_TURNSTILE_SITE_KEY } from '../consts';
+---
+
+<div class="newsletter-wrapper">
+    <div class="newsletter-header">
+        <h3 class="newsletter-title font-sans">Get new posts in your inbox</h3>
+    </div>
+    <form class="subscribe-form js-subscribe-form" autocomplete="off">
+        {/* Honeypot field - hides from real users, traps dumb bots */}
+        <input type="text" name="b_name" tabindex="-1" value="" style="position:absolute; left:-5000px;" aria-hidden="true" autocomplete="off" />
+
+        <div class="input-group">
+            <input 
+                type="email" 
+                name="email" 
+                placeholder="email@example.com" 
+                aria-label="Email address"
+                required 
+                class="email-input font-mono"
+            />
+            <button type="submit" class="submit-btn js-submit-btn font-mono">
+                Subscribe
+            </button>
+        </div>
+
+        {/* Turnstile Checkbox */}
+        <div class="cf-turnstile-wrapper">
+            <div class="cf-turnstile mt-4 rounded-md overflow-hidden" data-sitekey={PUBLIC_TURNSTILE_SITE_KEY} data-theme="auto" data-action="subscribe"></div>
+        </div>
+        
+        {/* Feedback Message Area */}
+        <div class="form-message js-form-message font-mono text-sm mt-3" aria-live="polite"></div>
+    </form>
+
+    <div class="newsletter-footer font-mono">
+        No spam · Zero tracking · Unsubscribe anytime
+    </div>
+</div>
+
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<script>
+    const forms = document.querySelectorAll('.js-subscribe-form');
+
+    forms.forEach((formEl) => {
+        // Type guard for TypeScript
+        const form = formEl instanceof HTMLFormElement ? formEl : null;
+        if (!form) return;
+
+        const messageDiv = form.querySelector('.js-form-message');
+        const submitBtn = form.querySelector('.js-submit-btn');
+
+        if (!messageDiv || !submitBtn) return;
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Basic UI State Check
+            submitBtn.setAttribute('disabled', 'true');
+            submitBtn.textContent = 'Sending...';
+            messageDiv.textContent = '';
+            messageDiv.className = 'form-message js-form-message font-mono text-sm mt-3 text-[var(--color-ink-muted)]';
+            
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/api/subscribe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const resultData = await response.json();
+                const isSuccess = resultData && typeof resultData === 'object' && 'success' in resultData && resultData.success;
+                const resultMessage = resultData && typeof resultData === 'object' && 'message' in resultData ? resultData.message : 'Subscribed successfully';
+                const resultError = resultData && typeof resultData === 'object' && 'error' in resultData ? resultData.error : 'Failed to subscribe';
+
+                if (response.ok && isSuccess) {
+                    messageDiv.textContent = '✅ ' + resultMessage;
+                    messageDiv.className = 'form-message js-form-message font-mono text-sm mt-3 text-green-600 dark:text-green-400';
+                    HTMLFormElement.prototype.reset.call(form);
+                    // Optional: reset turnstile widget
+                    // @ts-ignore
+                    if (window.turnstile) window.turnstile.reset();
+                } else {
+                    messageDiv.textContent = '❌ ' + resultError;
+                    messageDiv.className = 'form-message js-form-message font-mono text-sm mt-3 text-red-600 dark:text-red-400';
+                }
+            } catch (err) {
+                messageDiv.textContent = '❌ Network error, please try again.';
+                messageDiv.className = 'form-message js-form-message font-mono text-sm mt-3 text-red-600 dark:text-red-400';
+            } finally {
+                submitBtn.removeAttribute('disabled');
+                submitBtn.textContent = 'Subscribe';
+            }
+        });
+    });
+</script>
+
+<style>
+    .newsletter-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .newsletter-title {
+        font-family: 'Inter', var(--font-sans);
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.85rem;
+        color: var(--reading-fg, var(--color-ink));
+        text-align: center;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 0.5rem;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .email-input {
+        flex: 1;
+        min-width: 200px;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        border: 1px solid var(--reading-border, var(--color-border));
+        background: var(--reading-bg, var(--color-canvas));
+        color: var(--reading-fg, var(--color-ink));
+        font-size: 0.9rem;
+        transition: all 0.2s;
+    }
+
+    .email-input:focus {
+        outline: none;
+        border-color: var(--color-accent);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 20%, transparent);
+    }
+
+    .submit-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        background: var(--reading-fg, var(--color-ink));
+        color: var(--reading-bg, var(--color-canvas));
+        font-weight: 600;
+        font-size: 0.9rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+        opacity: 0.9;
+    }
+
+    .submit-btn:active:not(:disabled) {
+        transform: scale(0.98);
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    .cf-turnstile-wrapper {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .form-message {
+        text-align: center;
+    }
+
+    .newsletter-footer {
+        font-size: 0.75rem;
+        color: var(--reading-muted, var(--color-ink-faint));
+        margin-top: 0.85rem;
+        text-align: center;
+    }
+
+    @media (max-width: 640px) {
+        .input-group {
+            flex-direction: column;
+        }
+        .submit-btn {
+            width: 100%;
+        }
+    }
+</style>

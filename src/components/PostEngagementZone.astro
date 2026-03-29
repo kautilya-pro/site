@@ -1,0 +1,105 @@
+---
+import NewsletterForm from './NewsletterForm.astro';
+import SupportButton from './SupportButton.astro';
+---
+
+<section class="engagement-zone" aria-label="Support and Subscribe">
+    <div class="ez-header">
+        <!-- <span class="ez-emoji">✍️</span> -->
+        <p class="ez-copy">
+            If my writing made your day a little more interesting — subscribe to catch the next one, or fuel the next chapter with a coffee.
+            <!-- <br /> -->
+            <em class="text-[var(--color-ink-muted)] dark:text-[var(--color-ink-faint)]">(or both 😉)</em>
+        </p>
+    </div>
+
+    <div class="ez-body">
+        <div class="newsletter-section">
+            <NewsletterForm />
+        </div>
+        
+        <div class="ez-divider">
+            <div class="divider-line"></div>
+            <span>or</span>
+            <div class="divider-line"></div>
+        </div>
+
+        <div class="support-section">
+            <SupportButton />
+        </div>
+    </div>
+</section>
+
+<style>
+    .engagement-zone {
+        margin: 1.5rem 0;
+        padding: 2.5rem;
+        background: var(--reading-bg, var(--color-canvas));
+        border: 1px solid var(--reading-border, var(--color-border));
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+        color: var(--reading-fg, var(--color-ink));
+    }
+
+    .ez-header {
+        display: flex;
+        gap: 1.25rem;
+        align-items: flex-start;
+        margin-bottom: 2rem;
+    }
+
+    .ez-emoji {
+        font-size: 1.5rem;
+        line-height: 1.4;
+    }
+
+    .ez-copy {
+        font-family: 'Lora', var(--font-serif);
+        font-size: 1.2rem;
+        line-height: 1.6;
+        margin: 0;
+        color: var(--reading-fg, var(--color-ink));
+    }
+
+    .ez-body {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+
+    .ez-divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: var(--reading-muted, var(--color-ink-faint));
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .divider-line {
+        flex: 1;
+        height: 1px;
+        background-image: linear-gradient(to right, var(--reading-border, var(--color-border)) 50%, transparent 50%);
+        background-size: 8px 1px;
+        background-repeat: repeat-x;
+        opacity: 0.6;
+    }
+
+    .ez-divider span {
+        padding: 0 1rem;
+        opacity: 0.6;
+    }
+
+    @media (max-width: 640px) {
+        .engagement-zone {
+            padding: 1.5rem;
+        }
+        .ez-header {
+            gap: 1rem;
+        }
+    }
+</style>

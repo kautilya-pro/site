@@ -21,6 +21,18 @@ export default defineConfig({
         access: "public",
         optional: true,
       }),
+      PUBLIC_TURNSTILE_SITE_KEY: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+        default: "1x00000000000000000000AA",
+      }),
+      TURNSTILE_SECRET_KEY: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+        default: "1x0000000000000000000000000000000AA",
+      }),
       PUBLIC_GISCUS_REPO: envField.string({
         context: "client",
         access: "public",
