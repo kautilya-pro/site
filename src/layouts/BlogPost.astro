@@ -1,405 +1,434 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import SEO from '../components/SEO.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import TableOfContents from '../components/TableOfContents.astro';
-import PostEngagementZone from '../components/PostEngagementZone.astro';
-import { Image } from 'astro:assets';
+import BaseHead from "../components/BaseHead.astro";
+import SEO from "../components/SEO.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import TableOfContents from "../components/TableOfContents.astro";
+import PostEngagementZone from "../components/PostEngagementZone.astro";
+import { Image } from "astro:assets";
 import {
-	PUBLIC_GISCUS_REPO,
-	PUBLIC_GISCUS_REPO_ID,
-	PUBLIC_GISCUS_CATEGORY,
-	PUBLIC_GISCUS_CATEGORY_ID,
-} from 'astro:env/client';
+  PUBLIC_GISCUS_REPO,
+  PUBLIC_GISCUS_REPO_ID,
+  PUBLIC_GISCUS_CATEGORY,
+  PUBLIC_GISCUS_CATEGORY_ID,
+} from "astro:env/client";
 
 interface Heading {
-	depth: number;
-	slug: string;
-	text: string;
+  depth: number;
+  slug: string;
+  text: string;
 }
 
 interface Props {
-	title: string;
-	description: string;
-	date: Date;
-	updatedDate?: Date;
-	series: string;
-	permalinkSlug: string;
-	heroImage?: ImageMetadata;
-	headings: Heading[];
+  title: string;
+  description: string;
+  date: Date;
+  updatedDate?: Date;
+  series: string;
+  permalinkSlug: string;
+  heroImage?: ImageMetadata;
+  headings: Heading[];
 }
 
-const { title, description, date, updatedDate, series, permalinkSlug, heroImage, headings } = Astro.props;
+const {
+  title,
+  description,
+  date,
+  updatedDate,
+  series,
+  permalinkSlug,
+  heroImage,
+  headings,
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en" dir="ltr">
-	<head>
-		<BaseHead title={title} description={description} ogType="article" />
-		<SEO
-			title={title}
-			description={description}
-			date={date}
-			updatedDate={updatedDate}
-			series={series}
-			permalinkSlug={permalinkSlug}
-			type="article"
-		/>
-		<link rel="alternate" type="application/rss+xml" title={`${series} RSS Feed`} href={`/${series}/rss.xml`} />
-	</head>
-	<body>
-		<!-- CSS-only Reading Mode toggle (unchecked = dark shell, checked = reading surface) -->
-		<input type="checkbox" id="reading-mode" class="sr-only" />
+  <head>
+    <BaseHead title={title} description={description} ogType="article" />
+    <SEO
+      title={title}
+      description={description}
+      date={date}
+      updatedDate={updatedDate}
+      series={series}
+      permalinkSlug={permalinkSlug}
+      type="article"
+    />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${series} RSS Feed`}
+      href={`/${series}/rss.xml`}
+    />
+  </head>
+  <body>
+    <!-- CSS-only Reading Mode toggle (unchecked = dark shell, checked = reading surface) -->
+    <input type="checkbox" id="reading-mode" class="sr-only" />
 
-		<!-- Scroll-driven reading progress bar -->
-		<div class="reading-progress-bar" aria-hidden="true"></div>
+    <!-- Scroll-driven reading progress bar -->
+    <div class="reading-progress-bar" aria-hidden="true"></div>
 
-		<Header />
-		<div class="article-grid">
-			<article class="article-content">
-				<!-- Article Header -->
-				<header class="article-header">
-					<nav aria-label="Breadcrumb" class="mb-8">
-						<ol class="flex items-center space-x-2 text-[0.85rem] font-mono text-[var(--color-ink-muted)]">
-							<li>
-								<a href="/" class="hover:text-[var(--color-accent)] transition-colors">home</a>
-							</li>
-							<li>
-								<span class="text-[var(--color-ink-faint)] opacity-60">/</span>
-							</li>
-							<li>
-								<a href={`/${series}/`} class="hover:text-[var(--color-accent)] transition-colors">{series}</a>
-							</li>
-							<li>
-								<span class="text-[var(--color-ink-faint)] opacity-60">/</span>
-							</li>
-						</ol>
-					</nav>
+    <Header />
+    <div class="article-grid">
+      <article class="article-content">
+        <!-- Article Header -->
+        <header class="article-header">
+          <nav aria-label="Breadcrumb" class="mb-8">
+            <ol
+              class="flex items-center space-x-2 font-mono text-[0.85rem] text-[var(--color-ink-muted)]"
+            >
+              <li>
+                <a
+                  href="/"
+                  class="transition-colors hover:text-[var(--color-accent)]"
+                  >home</a
+                >
+              </li>
+              <li>
+                <span class="text-[var(--color-ink-faint)] opacity-60">/</span>
+              </li>
+              <li>
+                <a
+                  href={`/${series}/`}
+                  class="transition-colors hover:text-[var(--color-accent)]"
+                  >{series}</a
+                >
+              </li>
+              <li>
+                <span class="text-[var(--color-ink-faint)] opacity-60">/</span>
+              </li>
+            </ol>
+          </nav>
 
-					<h1 class="article-title">{title}</h1>
-					<p class="article-description">{description}</p>
-					
-					<div class="article-meta mt-6 !mb-0 text-[var(--color-ink-faint)] font-mono text-sm">
-						<span class="mr-2">Published:</span>
-						<FormattedDate date={date} />
-						{
-							updatedDate && (
-								<>
-									<span class="meta-separator mx-2">·</span>
-									<span class="updated-label">
-										Updated <FormattedDate date={updatedDate} />
-									</span>
-								</>
-							)
-						}
-					</div>
-				</header>
+          <h1 class="article-title">{title}</h1>
+          <p class="article-description">{description}</p>
 
-				{heroImage && (
-					<Image 
-						src={heroImage} 
-						alt={`Hero image for ${title}`} 
-						class="article-hero-image w-full h-auto rounded-xl shadow-sm border border-[var(--color-border)]" 
-						loading="eager" 
-						fetchpriority="high" 
-						decoding="async"
-					/>
-				)}
+          <div
+            class="article-meta mt-6 !mb-0 font-mono text-sm text-[var(--color-ink-faint)]"
+          >
+            <span class="mr-2">Published:</span>
+            <FormattedDate date={date} />
+            {
+              updatedDate && (
+                <>
+                  <span class="meta-separator mx-2">·</span>
+                  <span class="updated-label">
+                    Updated <FormattedDate date={updatedDate} />
+                  </span>
+                </>
+              )
+            }
+          </div>
+        </header>
 
-				<hr class="article-divider" />
+        {
+          heroImage && (
+            <Image
+              src={heroImage}
+              alt={`Hero image for ${title}`}
+              class="article-hero-image h-auto w-full rounded-xl border border-[var(--color-border)] shadow-sm"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+          )
+        }
 
-				<!-- Article Body -->
-				<div id="article-body" class="prose">
-					<slot />
-				</div>
+        <hr class="article-divider" />
 
-				<hr class="article-divider" />
+        <!-- Article Body -->
+        <div id="article-body" class="prose">
+          <slot />
+        </div>
 
-				<!-- Engagement Zone -->
-				<PostEngagementZone />
+        <hr class="article-divider" />
 
-				<hr class="article-divider" />
+        <!-- Engagement Zone -->
+        <PostEngagementZone />
 
-				<!-- Giscus Comments Placeholder -->
-				<section id="giscus-comments" class="comments-section">
-					<h2 class="comments-title">Comments</h2>
-					<script is:inline src="https://giscus.app/client.js"
-						data-repo={PUBLIC_GISCUS_REPO}
-						data-repo-id={PUBLIC_GISCUS_REPO_ID}
-						data-category={PUBLIC_GISCUS_CATEGORY}
-						data-category-id={PUBLIC_GISCUS_CATEGORY_ID}
-						data-mapping="pathname"
-						data-strict="0"
-						data-reactions-enabled="1"
-						data-emit-metadata="0"
-						data-input-position="bottom"
-						data-theme="transparent_dark"
-						data-lang="en"
-						data-loading="lazy"
-						crossorigin="anonymous"
-						async>
-					</script>
-				</section>
-			</article>
+        <hr class="article-divider" />
 
-			<!-- Table of Contents Sidebar -->
-			<aside class="article-sidebar">
-				<TableOfContents headings={headings} type="desktop" />
-			</aside>
-		</div>
-		
-		<!-- Mobile TOC Drawer (Placed outside the grid so it's not hidden by the responsive sidebar logic) -->
-		<TableOfContents headings={headings} type="mobile" />
-		
-		<Footer />
-	</body>
+        <!-- Giscus Comments Placeholder -->
+        <section id="giscus-comments" class="comments-section">
+          <h2 class="comments-title">Comments</h2>
+          <script
+            is:inline
+            src="https://giscus.app/client.js"
+            data-repo={PUBLIC_GISCUS_REPO}
+            data-repo-id={PUBLIC_GISCUS_REPO_ID}
+            data-category={PUBLIC_GISCUS_CATEGORY}
+            data-category-id={PUBLIC_GISCUS_CATEGORY_ID}
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="transparent_dark"
+            data-lang="en"
+            data-loading="lazy"
+            crossorigin="anonymous"
+            async></script>
+        </section>
+      </article>
+
+      <!-- Table of Contents Sidebar -->
+      <aside class="article-sidebar">
+        <TableOfContents headings={headings} type="desktop" />
+      </aside>
+    </div>
+
+    <!-- Mobile TOC Drawer (Placed outside the grid so it's not hidden by the responsive sidebar logic) -->
+    <TableOfContents headings={headings} type="mobile" />
+
+    <Footer />
+  </body>
 </html>
 
 <style>
-	/* ──────────────────────────────────────────────────────────
+  /* ──────────────────────────────────────────────────────────
 	 * READING EXPERIENCE — Scoped Theme-Aware Palette
 	 * Uses color-scheme + light-dark() scoped to the article
 	 * container so it does NOT affect header/footer/site chrome.
 	 * ────────────────────────────────────────────────────────── */
 
-	/* ── Scroll-Driven Progress Bar ── */
-	@keyframes progress-grow {
-		from {
-			transform: scaleX(0);
-		}
-		to {
-			transform: scaleX(1);
-		}
-	}
+  /* ── Scroll-Driven Progress Bar ── */
+  @keyframes progress-grow {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
 
-	.reading-progress-bar {
-		position: fixed;
-		top: 0;
-		inset-inline: 0;
-		height: 3px;
-		background: var(--color-accent);
-		transform-origin: left;
-		transform: scaleX(0);
-		z-index: 9999;
+  .reading-progress-bar {
+    position: fixed;
+    top: 0;
+    inset-inline: 0;
+    height: 3px;
+    background: var(--color-accent);
+    transform-origin: left;
+    transform: scaleX(0);
+    z-index: 9999;
 
-		/* Scroll-driven animation (Chromium 115+, graceful degradation) */
-		animation: progress-grow linear;
-		animation-timeline: scroll(root);
-	}
+    /* Scroll-driven animation (Chromium 115+, graceful degradation) */
+    animation: progress-grow linear;
+    animation-timeline: scroll(root);
+  }
 
-	body:has(#reading-mode:checked) .reading-progress-bar {
-		background: light-dark(#2563eb, #60a5fa);
-	}
+  body:has(#reading-mode:checked) .reading-progress-bar {
+    background: light-dark(#2563eb, #60a5fa);
+  }
 
-	/* ── Grid Layout ── */
-	.article-grid {
-		display: grid;
-		grid-template-columns: 1fr 250px;
-		gap: 3rem;
-		max-width: var(--width-page);
-		margin: 0 auto;
-		padding: 3rem 1.5rem;
-	}
+  /* ── Grid Layout ── */
+  .article-grid {
+    display: grid;
+    grid-template-columns: 1fr 250px;
+    gap: 3rem;
+    max-width: var(--width-page);
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+  }
 
-	/* ── Article Container ── */
-	.article-content {
-		min-width: 0;
-		max-width: 65ch;
-		margin-inline: auto;
-	}
+  /* ── Article Container ── */
+  .article-content {
+    min-width: 0;
+    max-width: 65ch;
+    margin-inline: auto;
+  }
 
-	body:has(#reading-mode:checked) .article-content {
-		color-scheme: light dark;
+  body:has(#reading-mode:checked) .article-content {
+    color-scheme: light dark;
 
-		/* Reading palette (scoped) */
-		--reading-bg: light-dark(#fdfdfc, #1a1a1a);
-		--reading-fg: light-dark(#2c2c2c, #e0e0e0);
-		--reading-muted: light-dark(#595959, #9e9e9e);
-		--reading-accent: light-dark(#2563eb, #60a5fa);
-		--reading-accent-tint: light-dark(
-			rgba(37, 99, 235, 0.08),
-			rgba(96, 165, 250, 0.1)
-		);
-		--reading-border: light-dark(
-			rgba(0, 0, 0, 0.08),
-			rgba(255, 255, 255, 0.08)
-		);
+    /* Reading palette (scoped) */
+    --reading-bg: light-dark(#fdfdfc, #1a1a1a);
+    --reading-fg: light-dark(#2c2c2c, #e0e0e0);
+    --reading-muted: light-dark(#595959, #9e9e9e);
+    --reading-accent: light-dark(#2563eb, #60a5fa);
+    --reading-accent-tint: light-dark(
+      rgba(37, 99, 235, 0.08),
+      rgba(96, 165, 250, 0.1)
+    );
+    --reading-border: light-dark(
+      rgba(0, 0, 0, 0.08),
+      rgba(255, 255, 255, 0.08)
+    );
 
-		/* Solid background — NO textures, NO background-image */
-		background-color: var(--reading-bg);
-		background-image: none !important;
-		color: var(--reading-fg);
+    /* Solid background — NO textures, NO background-image */
+    background-color: var(--reading-bg);
+    background-image: none !important;
+    color: var(--reading-fg);
 
-		/* Card-like reading surface */
-		padding: 2rem 2.5rem;
-		border-radius: 12px;
-	}
+    /* Card-like reading surface */
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+  }
 
-	/* ── Article Header ── */
-	.article-header {
-		margin-bottom: 2rem;
-	}
+  /* ── Article Header ── */
+  .article-header {
+    margin-bottom: 2rem;
+  }
 
-	/* ── Hero Image ── */
-	body:has(#reading-mode:checked) .article-hero-image {
-		/* Break out of .article-content's 2.5rem horizontal padding */
-		width: calc(100% + 5rem);
-		max-width: none;
-		margin-inline: -2.5rem;
-		border-radius: 0;
-		border-left: none;
-		border-right: none;
-	}
+  /* ── Hero Image ── */
+  body:has(#reading-mode:checked) .article-hero-image {
+    /* Break out of .article-content's 2.5rem horizontal padding */
+    width: calc(100% + 5rem);
+    max-width: none;
+    margin-inline: -2.5rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
 
-	.article-title {
-		margin-bottom: 0.75rem;
-	}
-	body:has(#reading-mode:checked) .article-title {
-		font-family: 'Inter', var(--font-sans);
-		line-height: 1.15;
-		letter-spacing: -0.025em;
-		color: var(--reading-fg);
-		text-wrap: balance;
-	}
+  .article-title {
+    margin-bottom: 0.75rem;
+  }
+  body:has(#reading-mode:checked) .article-title {
+    font-family: "Inter", var(--font-sans);
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    color: var(--reading-fg);
+    text-wrap: balance;
+  }
 
-	.article-description {
-		color: var(--color-ink-muted);
-		margin: 0;
-	}
-	body:has(#reading-mode:checked) .article-description {
-		font-family: 'Lora', var(--font-serif);
-		font-size: 1.125rem;
-		color: var(--reading-muted);
-		line-height: 1.6;
-	}
+  .article-description {
+    color: var(--color-ink-muted);
+    margin: 0;
+  }
+  body:has(#reading-mode:checked) .article-description {
+    font-family: "Lora", var(--font-serif);
+    font-size: 1.125rem;
+    color: var(--reading-muted);
+    line-height: 1.6;
+  }
 
-	body:has(#reading-mode:checked) .article-divider {
-		border-top: 1px solid var(--reading-border);
-		margin: 2.5rem 0;
-	}
+  body:has(#reading-mode:checked) .article-divider {
+    border-top: 1px solid var(--reading-border);
+    margin: 2.5rem 0;
+  }
 
-	/* ── Prose — Typography & Rhythm ── */
-	body:has(#reading-mode:checked) .prose {
-		font-family: 'Lora', var(--font-serif);
-		font-size: clamp(1.125rem, 1vw + 1rem, 1.25rem);
-		line-height: 1.75;
-		color: var(--reading-fg);
+  /* ── Prose — Typography & Rhythm ── */
+  body:has(#reading-mode:checked) .prose {
+    font-family: "Lora", var(--font-serif);
+    font-size: clamp(1.125rem, 1vw + 1rem, 1.25rem);
+    line-height: 1.75;
+    color: var(--reading-fg);
 
-		/* Override Tailwind Typography prose vars */
-		--tw-prose-body: var(--reading-fg);
-		--tw-prose-headings: var(--reading-fg);
-		--tw-prose-links: var(--reading-accent);
-		--tw-prose-bold: var(--reading-fg);
-		--tw-prose-code: var(--reading-accent);
-		--tw-prose-quotes: var(--reading-muted);
-		--tw-prose-quote-borders: var(--reading-accent);
-		--tw-prose-counters: var(--reading-muted);
-		--tw-prose-bullets: var(--reading-muted);
-		--tw-prose-hr: var(--reading-border);
-	}
+    /* Override Tailwind Typography prose vars */
+    --tw-prose-body: var(--reading-fg);
+    --tw-prose-headings: var(--reading-fg);
+    --tw-prose-links: var(--reading-accent);
+    --tw-prose-bold: var(--reading-fg);
+    --tw-prose-code: var(--reading-accent);
+    --tw-prose-quotes: var(--reading-muted);
+    --tw-prose-quote-borders: var(--reading-accent);
+    --tw-prose-counters: var(--reading-muted);
+    --tw-prose-bullets: var(--reading-muted);
+    --tw-prose-hr: var(--reading-border);
+  }
 
-	body:has(#reading-mode:checked) .prose :where(h1, h2, h3, h4, h5, h6) {
-		font-family: 'Inter', var(--font-sans);
-	}
+  body:has(#reading-mode:checked) .prose :where(h1, h2, h3, h4, h5, h6) {
+    font-family: "Inter", var(--font-sans);
+  }
 
-	body:has(#reading-mode:checked) .prose :where(h1, h2, h3) {
-		text-wrap: balance;
-	}
+  body:has(#reading-mode:checked) .prose :where(h1, h2, h3) {
+    text-wrap: balance;
+  }
 
-	/* Paragraphs */
-	body:has(#reading-mode:checked) .prose :where(p) {
-		text-wrap: pretty;
-	}
+  /* Paragraphs */
+  body:has(#reading-mode:checked) .prose :where(p) {
+    text-wrap: pretty;
+  }
 
-	body:has(#reading-mode:checked) .prose :where(a) {
-		color: var(--reading-accent);
-		text-decoration: underline;
-		text-underline-offset: 3px;
-		text-decoration-color: var(--reading-accent-tint);
-		transition: text-decoration-color 0.2s var(--ease-out-expo);
-	}
+  body:has(#reading-mode:checked) .prose :where(a) {
+    color: var(--reading-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--reading-accent-tint);
+    transition: text-decoration-color 0.2s var(--ease-out-expo);
+  }
 
-	body:has(#reading-mode:checked) .prose :where(a:hover) {
-		text-decoration-color: var(--reading-accent);
-	}
+  body:has(#reading-mode:checked) .prose :where(a:hover) {
+    text-decoration-color: var(--reading-accent);
+  }
 
-	/* ── Drop Cap — First paragraph + first paragraph after h2 ── */
-	body:has(#reading-mode:checked) .prose > p:first-of-type::first-letter,
-	body:has(#reading-mode:checked) .prose > h2 + p::first-letter {
-		font-family: 'Inter', var(--font-sans);
-		float: left;
-		font-size: 3.2em;
-		line-height: 0.85;
-		padding-right: 0.08em;
-		margin-top: 0.05em;
-		font-weight: 700;
-		color: var(--reading-accent);
-	}
+  /* ── Drop Cap — First paragraph + first paragraph after h2 ── */
+  body:has(#reading-mode:checked) .prose > p:first-of-type::first-letter,
+  body:has(#reading-mode:checked) .prose > h2 + p::first-letter {
+    font-family: "Inter", var(--font-sans);
+    float: left;
+    font-size: 3.2em;
+    line-height: 0.85;
+    padding-right: 0.08em;
+    margin-top: 0.05em;
+    font-weight: 700;
+    color: var(--reading-accent);
+  }
 
-	/* ── Blockquotes — Rich styling ── */
-	body:has(#reading-mode:checked) .prose :where(blockquote) {
-		border-left: 4px solid var(--reading-accent);
-		background: var(--reading-accent-tint);
-		padding: 1rem 1.25rem;
-		margin: 1.75rem 0;
-		border-radius: 0 8px 8px 0;
-		font-style: italic;
-		color: var(--reading-muted);
-	}
-	body:has(#reading-mode:checked) .prose :where(blockquote p) {
-		margin: 0;
-	}
+  /* ── Blockquotes — Rich styling ── */
+  body:has(#reading-mode:checked) .prose :where(blockquote) {
+    border-left: 4px solid var(--reading-accent);
+    background: var(--reading-accent-tint);
+    padding: 1rem 1.25rem;
+    margin: 1.75rem 0;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    color: var(--reading-muted);
+  }
+  body:has(#reading-mode:checked) .prose :where(blockquote p) {
+    margin: 0;
+  }
 
-	/* ── Sidebar ── */
-	.article-sidebar {
-		display: block;
-	}
+  /* ── Sidebar ── */
+  .article-sidebar {
+    display: block;
+  }
 
-	/* ── Comments ── */
-	.comments-section {
-		margin-top: 1rem;
-	}
+  /* ── Comments ── */
+  .comments-section {
+    margin-top: 1rem;
+  }
 
-	.comments-title {
-		font-size: 1.25rem;
-		margin-bottom: 1rem;
-	}
-	body:has(#reading-mode:checked) .comments-title {
-		font-family: 'Inter', var(--font-sans);
-		color: var(--reading-fg);
-	}
+  .comments-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  body:has(#reading-mode:checked) .comments-title {
+    font-family: "Inter", var(--font-sans);
+    color: var(--reading-fg);
+  }
 
-	/* ── Responsive ── */
-	@media (max-width: 1024px) {
-		.article-grid {
-			grid-template-columns: 1fr;
-			padding: 2rem 1rem;
-		}
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .article-grid {
+      grid-template-columns: 1fr;
+      padding: 2rem 1rem;
+    }
 
-		.article-content {
-			width: 100%;
-		}
+    .article-content {
+      width: 100%;
+    }
 
-		/* Adjust padding for mobile in reader mode to prevent squishing */
-		body:has(#reading-mode:checked) .article-content {
-			padding: 1.5rem 1rem;
-			border-radius: 0;
-		}
+    /* Adjust padding for mobile in reader mode to prevent squishing */
+    body:has(#reading-mode:checked) .article-content {
+      padding: 1.5rem 1rem;
+      border-radius: 0;
+    }
 
-		/* Re-adjust hero image breakout for the new 1rem mobile padding */
-		body:has(#reading-mode:checked) .article-hero-image {
-			width: calc(100% + 2rem);
-			margin-inline: -1rem;
-		}
+    /* Re-adjust hero image breakout for the new 1rem mobile padding */
+    body:has(#reading-mode:checked) .article-hero-image {
+      width: calc(100% + 2rem);
+      margin-inline: -1rem;
+    }
 
-		.article-sidebar {
-			display: none;
-		}
+    .article-sidebar {
+      display: none;
+    }
 
-		.article-title {
-			font-size: 2rem;
-		}
-	}
+    .article-title {
+      font-size: 2rem;
+    }
+  }
 </style>

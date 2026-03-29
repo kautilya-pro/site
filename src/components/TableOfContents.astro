@@ -1,547 +1,668 @@
 ---
 interface Heading {
-	depth: number;
-	slug: string;
-	text: string;
+  depth: number;
+  slug: string;
+  text: string;
 }
 
 interface Props {
-	headings: Heading[];
-	type?: 'desktop' | 'mobile' | 'both';
+  headings: Heading[];
+  type?: "desktop" | "mobile" | "both";
 }
 
-const { headings, type = 'both' } = Astro.props;
+const { headings, type = "both" } = Astro.props;
 const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
 {
-	tocHeadings.length > 0 && (
-		<>
-			{/* Desktop Sidebar TOC */}
-			{type !== 'mobile' && (
-			<nav aria-label="Table of Contents (Desktop)" class="toc-desktop">
-				<label for="reading-mode" class="toc-reading-toggle" aria-label="Toggle reading mode">
-					<span aria-hidden="true">📖</span>
-					Reading mode
-				</label>
-				<p class="toc-title">On this page</p>
-				<div class="toc-scroll-area">
-					<ul class="toc-list">
-						{tocHeadings.map((heading) => (
-							<li
-								class:list={[
-									'toc-item',
-									heading.depth === 3 && 'toc-item--nested',
-								]}
-							>
-								<a href={`#${heading.slug}`} class="toc-link">
-									{heading.text}
-								</a>
-							</li>
-						))}
-						<li class="toc-item mt-6">
-							<a href="#" class="toc-link toc-link--back-to-top flex items-center gap-1.5 transition-colors">
-								<svg xmlns="http://www.w3.org/0000.svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-									<path fill-rule="evenodd" d="M14.77 12.79a.75.75 0 01-1.06-.02L10 8.832 6.29 12.77a.75.75 0 11-1.08-1.04l4.25-4.5a.75.75 0 011.08 0l4.25 4.5a.75.75 0 01-.02 1.06z" clip-rule="evenodd" />
-								</svg>
-								Back to top
-							</a>
-						</li>
-					</ul>
-				</div>
-			</nav>
-			)}
+  tocHeadings.length > 0 && (
+    <>
+      {/* Desktop Sidebar TOC */}
+      {type !== "mobile" && (
+        <nav aria-label="Table of Contents (Desktop)" class="toc-desktop">
+          <label
+            for="reading-mode"
+            class="toc-reading-toggle"
+            aria-label="Toggle reading mode"
+          >
+            <span aria-hidden="true">📖</span>
+            Reading mode
+          </label>
+          <p class="toc-title">On this page</p>
+          <div class="toc-scroll-area">
+            <ul class="toc-list">
+              {tocHeadings.map((heading) => (
+                <li
+                  class:list={[
+                    "toc-item",
+                    heading.depth === 3 && "toc-item--nested",
+                  ]}
+                >
+                  <a href={`#${heading.slug}`} class="toc-link">
+                    {heading.text}
+                  </a>
+                </li>
+              ))}
+              <li class="toc-item mt-6">
+                <a
+                  href="#"
+                  class="toc-link toc-link--back-to-top flex items-center gap-1.5 transition-colors"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/0000.svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    class="h-4 w-4"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M14.77 12.79a.75.75 0 01-1.06-.02L10 8.832 6.29 12.77a.75.75 0 11-1.08-1.04l4.25-4.5a.75.75 0 011.08 0l4.25 4.5a.75.75 0 01-.02 1.06z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Back to top
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      )}
 
-			{/* Mobile Floating Capsule (TOC & Back to Top) and Bottom Drawer */}
-			{type !== 'desktop' && (
-			<div class="toc-mobile-container">
-				<!-- Modern Floating Capsule -->
-				<div class="toc-mobile-capsule">
-					<label for="reading-mode" class="toc-mobile-reading-mode" aria-label="Toggle reading mode">
-						<span aria-hidden="true">📖</span>
-						<span>Read</span>
-					</label>
-					<div class="capsule-divider"></div>
-					<button 
-						type="button" 
-						class="toc-mobile-toggle"
-						aria-label="Table of Contents"
-						aria-expanded="false"
-					>
-						<svg xmlns="http://www.w3.org/0000.svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-							<line x1="8" y1="6" x2="21" y2="6"></line>
-							<line x1="8" y1="12" x2="21" y2="12"></line>
-							<line x1="8" y1="18" x2="21" y2="18"></line>
-							<line x1="3" y1="6" x2="3.01" y2="6"></line>
-							<line x1="3" y1="12" x2="3.01" y2="12"></line>
-							<line x1="3" y1="18" x2="3.01" y2="18"></line>
-						</svg>
-						<span>Contents</span>
-					</button>
-					<div class="capsule-divider"></div>
-					<button 
-						type="button" 
-						class="toc-mobile-top"
-						aria-label="Back to Top"
-						onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
-					>
-						<svg xmlns="http://www.w3.org/0000.svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-							<path fill-rule="evenodd" d="M14.77 12.79a.75.75 0 01-1.06-.02L10 8.832 6.29 12.77a.75.75 0 11-1.08-1.04l4.25-4.5a.75.75 0 011.08 0l4.25 4.5a.75.75 0 01-.02 1.06z" clip-rule="evenodd" />
-						</svg>
-					</button>
-				</div>
+      {/* Mobile Floating Capsule (TOC & Back to Top) and Bottom Drawer */}
+      {type !== "desktop" && (
+        <div class="toc-mobile-container">
+          <div class="toc-mobile-capsule">
+            <label
+              for="reading-mode"
+              class="toc-mobile-reading-mode"
+              aria-label="Toggle reading mode"
+            >
+              <span aria-hidden="true">📖</span>
+              <span>Read</span>
+            </label>
+            <div class="capsule-divider" />
+            <button
+              type="button"
+              class="toc-mobile-toggle"
+              aria-label="Table of Contents"
+              aria-expanded="false"
+            >
+              <svg
+                xmlns="http://www.w3.org/0000.svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="h-4 w-4"
+              >
+                <line x1="8" y1="6" x2="21" y2="6" />
+                <line x1="8" y1="12" x2="21" y2="12" />
+                <line x1="8" y1="18" x2="21" y2="18" />
+                <line x1="3" y1="6" x2="3.01" y2="6" />
+                <line x1="3" y1="12" x2="3.01" y2="12" />
+                <line x1="3" y1="18" x2="3.01" y2="18" />
+              </svg>
+              <span>Contents</span>
+            </button>
+            <div class="capsule-divider" />
+            <button
+              type="button"
+              class="toc-mobile-top"
+              aria-label="Back to Top"
+              onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+            >
+              <svg
+                xmlns="http://www.w3.org/0000.svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="h-4 w-4"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M14.77 12.79a.75.75 0 01-1.06-.02L10 8.832 6.29 12.77a.75.75 0 11-1.08-1.04l4.25-4.5a.75.75 0 011.08 0l4.25 4.5a.75.75 0 01-.02 1.06z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
 
-				<!-- Drawer Backdrop -->
-				<div class="toc-mobile-backdrop" aria-hidden="true"></div>
+          <div class="toc-mobile-backdrop" aria-hidden="true" />
 
-				<!-- Bottom Sheet Drawer -->
-				<nav class="toc-mobile-menu" aria-label="Table of Contents (Mobile)">
-					<div class="flex items-center justify-between mb-4 pb-4 border-b border-[var(--color-border)]">
-						<p class="toc-title !m-0">On this page</p>
-						<button type="button" class="toc-mobile-close" aria-label="Close Table of Contents">
-							<svg xmlns="http://www.w3.org/0000.svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
-								<line x1="18" y1="6" x2="6" y2="18"></line>
-								<line x1="6" y1="6" x2="18" y2="18"></line>
-							</svg>
-						</button>
-					</div>
-					<div class="toc-scroll-area">
-						<ul class="toc-list">
-							{tocHeadings.map((heading) => (
-								<li
-									class:list={[
-										'toc-item',
-										heading.depth === 3 && 'toc-item--nested',
-									]}
-								>
-									<a href={`#${heading.slug}`} class="toc-link">
-										{heading.text}
-									</a>
-								</li>
-							))}
-							<li class="toc-item mt-6 mb-4">
-								<a href="#" class="toc-link toc-link--back-to-top flex items-center gap-1.5 transition-colors">
-									<svg xmlns="http://www.w3.org/0000.svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-										<path fill-rule="evenodd" d="M14.77 12.79a.75.75 0 01-1.06-.02L10 8.832 6.29 12.77a.75.75 0 11-1.08-1.04l4.25-4.5a.75.75 0 011.08 0l4.25 4.5a.75.75 0 01-.02 1.06z" clip-rule="evenodd" />
-									</svg>
-									Back to top
-								</a>
-							</li>
-						</ul>
-					</div>
-				</nav>
-			</div>
-			)}
-		</>
-	)
+          <nav class="toc-mobile-menu" aria-label="Table of Contents (Mobile)">
+            <div class="mb-4 flex items-center justify-between border-b border-[var(--color-border)] pb-4">
+              <p class="toc-title !m-0">On this page</p>
+              <button
+                type="button"
+                class="toc-mobile-close"
+                aria-label="Close Table of Contents"
+              >
+                <svg
+                  xmlns="http://www.w3.org/0000.svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="h-5 w-5"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            <div class="toc-scroll-area">
+              <ul class="toc-list">
+                {tocHeadings.map((heading) => (
+                  <li
+                    class:list={[
+                      "toc-item",
+                      heading.depth === 3 && "toc-item--nested",
+                    ]}
+                  >
+                    <a href={`#${heading.slug}`} class="toc-link">
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+                <li class="toc-item mt-6 mb-4">
+                  <a
+                    href="#"
+                    class="toc-link toc-link--back-to-top flex items-center gap-1.5 transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/0000.svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      class="h-4 w-4"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M14.77 12.79a.75.75 0 01-1.06-.02L10 8.832 6.29 12.77a.75.75 0 11-1.08-1.04l4.25-4.5a.75.75 0 011.08 0l4.25 4.5a.75.75 0 01-.02 1.06z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    Back to top
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      )}
+    </>
+  )
 }
 
 <script is:inline>
-(() => {
-	if (window.__toc_initialized) return;
-	window.__toc_initialized = true;
+  (() => {
+    if (window.__toc_initialized) return;
+    window.__toc_initialized = true;
 
-	function setupScrollSpy() {
-		const headings = Array.from(document.querySelectorAll('.prose h2, .prose h3'));
-		const tocLinks = document.querySelectorAll('.toc-link');
-		if (headings.length === 0 || tocLinks.length === 0) return;
+    function setupScrollSpy() {
+      const headings = Array.from(
+        document.querySelectorAll(".prose h2, .prose h3"),
+      );
+      const tocLinks = document.querySelectorAll(".toc-link");
+      if (headings.length === 0 || tocLinks.length === 0) return;
 
-		const updateActiveTOC = () => {
-			let current = '';
-			const scrollPos = window.scrollY + 100;
+      const updateActiveTOC = () => {
+        let current = "";
+        const scrollPos = window.scrollY + 100;
 
-			// Find the active heading
-			for (let i = 0; i < headings.length; i++) {
-				const id = headings[i].id;
-				const elementPosition = window.scrollY + headings[i].getBoundingClientRect().top;
-				
-				if (elementPosition <= scrollPos) {
-					current = id;
-				} else {
-					break;
-				}
-			}
+        // Find the active heading
+        for (let i = 0; i < headings.length; i++) {
+          const id = headings[i].id;
+          const elementPosition =
+            window.scrollY + headings[i].getBoundingClientRect().top;
 
-			if ((window.innerHeight + Math.round(window.scrollY)) >= document.documentElement.scrollHeight - 50) {
-				current = headings[headings.length - 1].id;
-			} else if (!current && headings.length > 0) {
-				current = headings[0].id;
-			}
+          if (elementPosition <= scrollPos) {
+            current = id;
+          } else {
+            break;
+          }
+        }
 
-			tocLinks.forEach((link) => {
-				link.classList.remove('active');
-				const href = link.getAttribute('href');
-				
-				if (href === `#${current}`) {
-					link.classList.add('active');
+        if (
+          window.innerHeight + Math.round(window.scrollY) >=
+          document.documentElement.scrollHeight - 50
+        ) {
+          current = headings[headings.length - 1].id;
+        } else if (!current && headings.length > 0) {
+          current = headings[0].id;
+        }
 
-					const tocScrollAreas = document.querySelectorAll('.toc-scroll-area');
-					tocScrollAreas.forEach((toc) => {
-						const linkRect = link.getBoundingClientRect();
-						const tocRect = toc.getBoundingClientRect();
+        tocLinks.forEach((link) => {
+          link.classList.remove("active");
+          const href = link.getAttribute("href");
 
-						if (tocRect.height > 0) {
-							if (linkRect.top < tocRect.top) {
-								toc.scrollBy({ top: linkRect.top - tocRect.top - 16, behavior: 'smooth' });
-							} else if (linkRect.bottom > tocRect.bottom) {
-								toc.scrollBy({ top: linkRect.bottom - tocRect.bottom + 16, behavior: 'smooth' });
-							}
-						}
-					});
-				}
-			});
-		};
+          if (href === `#${current}`) {
+            link.classList.add("active");
 
-		let ticking = false;
-		const onScroll = () => {
-			if (!ticking) {
-				window.requestAnimationFrame(() => {
-					updateActiveTOC();
-					ticking = false;
-				});
-				ticking = true;
-			}
-		};
+            const tocScrollAreas =
+              document.querySelectorAll(".toc-scroll-area");
+            tocScrollAreas.forEach((toc) => {
+              const linkRect = link.getBoundingClientRect();
+              const tocRect = toc.getBoundingClientRect();
 
-		// Mobile Toggle Logic (Handles multiple instances properly now)
-		const mobileToggles = document.querySelectorAll('.toc-mobile-toggle');
-		const mobileCloses = document.querySelectorAll('.toc-mobile-close');
-		const mobileMenus = document.querySelectorAll('.toc-mobile-menu');
-		const mobileBackdrops = document.querySelectorAll('.toc-mobile-backdrop');
-		const tocMobileLinks = document.querySelectorAll('.toc-mobile-container .toc-link');
+              if (tocRect.height > 0) {
+                if (linkRect.top < tocRect.top) {
+                  toc.scrollBy({
+                    top: linkRect.top - tocRect.top - 16,
+                    behavior: "smooth",
+                  });
+                } else if (linkRect.bottom > tocRect.bottom) {
+                  toc.scrollBy({
+                    top: linkRect.bottom - tocRect.bottom + 16,
+                    behavior: "smooth",
+                  });
+                }
+              }
+            });
+          }
+        });
+      };
 
-		const toggleMobileMenu = () => {
-			mobileToggles.forEach(toggle => {
-				const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-				
-				if (isExpanded) {
-					// Close
-					toggle.setAttribute('aria-expanded', 'false');
-					mobileMenus.forEach(menu => menu.classList.remove('open'));
-					mobileBackdrops.forEach(backdrop => backdrop.classList.remove('open'));
-					document.body.style.overflow = '';
-				} else {
-					// Open
-					toggle.setAttribute('aria-expanded', 'true');
-					mobileMenus.forEach(menu => menu.classList.add('open'));
-					mobileBackdrops.forEach(backdrop => backdrop.classList.add('open'));
-					document.body.style.overflow = 'hidden'; // Prevent page scrolling while TOC is open
-					setTimeout(updateActiveTOC, 50);
-				}
-			});
-		};
+      let ticking = false;
+      const onScroll = () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            updateActiveTOC();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
 
-		mobileToggles.forEach(toggle => toggle.addEventListener('click', toggleMobileMenu));
-		mobileCloses.forEach(close => close.addEventListener('click', toggleMobileMenu));
-		mobileBackdrops.forEach(backdrop => backdrop.addEventListener('click', toggleMobileMenu));
-		
-		// Close mobile menu when a link is clicked
-		tocMobileLinks.forEach(link => {
-			link.addEventListener('click', () => {
-				const anyOpen = Array.from(mobileToggles).some(t => t.getAttribute('aria-expanded') === 'true');
-				if (anyOpen) toggleMobileMenu();
-			});
-		});
+      // Mobile Toggle Logic (Handles multiple instances properly now)
+      const mobileToggles = document.querySelectorAll(".toc-mobile-toggle");
+      const mobileCloses = document.querySelectorAll(".toc-mobile-close");
+      const mobileMenus = document.querySelectorAll(".toc-mobile-menu");
+      const mobileBackdrops = document.querySelectorAll(".toc-mobile-backdrop");
+      const tocMobileLinks = document.querySelectorAll(
+        ".toc-mobile-container .toc-link",
+      );
 
-		window.addEventListener('scroll', onScroll, { passive: true });
-		updateActiveTOC(); // initial execution
+      const toggleMobileMenu = () => {
+        mobileToggles.forEach((toggle) => {
+          const isExpanded = toggle.getAttribute("aria-expanded") === "true";
 
-		return () => {
-			window.removeEventListener('scroll', onScroll);
-			mobileToggles.forEach(toggle => toggle.removeEventListener('click', toggleMobileMenu));
-			mobileCloses.forEach(close => close.removeEventListener('click', toggleMobileMenu));
-			mobileBackdrops.forEach(backdrop => backdrop.removeEventListener('click', toggleMobileMenu));
-		};
-	}
+          if (isExpanded) {
+            // Close
+            toggle.setAttribute("aria-expanded", "false");
+            mobileMenus.forEach((menu) => menu.classList.remove("open"));
+            mobileBackdrops.forEach((backdrop) =>
+              backdrop.classList.remove("open"),
+            );
+            document.body.style.overflow = "";
+          } else {
+            // Open
+            toggle.setAttribute("aria-expanded", "true");
+            mobileMenus.forEach((menu) => menu.classList.add("open"));
+            mobileBackdrops.forEach((backdrop) =>
+              backdrop.classList.add("open"),
+            );
+            document.body.style.overflow = "hidden"; // Prevent page scrolling while TOC is open
+            setTimeout(updateActiveTOC, 50);
+          }
+        });
+      };
 
-	let cleanup;
-	const init = () => {
-		if (cleanup) cleanup();
-		cleanup = setupScrollSpy();
-	};
+      mobileToggles.forEach((toggle) =>
+        toggle.addEventListener("click", toggleMobileMenu),
+      );
+      mobileCloses.forEach((close) =>
+        close.addEventListener("click", toggleMobileMenu),
+      );
+      mobileBackdrops.forEach((backdrop) =>
+        backdrop.addEventListener("click", toggleMobileMenu),
+      );
 
-	// Use astro:page-load for Astro view transitions (if used), or DOMContentLoaded
-	document.addEventListener('astro:page-load', init);
-	if (document.readyState === 'complete' || document.readyState === 'interactive') {
-		init();
-	} else {
-		document.addEventListener('DOMContentLoaded', init);
-	}
-})();
+      // Close mobile menu when a link is clicked
+      tocMobileLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          const anyOpen = Array.from(mobileToggles).some(
+            (t) => t.getAttribute("aria-expanded") === "true",
+          );
+          if (anyOpen) toggleMobileMenu();
+        });
+      });
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      updateActiveTOC(); // initial execution
+
+      return () => {
+        window.removeEventListener("scroll", onScroll);
+        mobileToggles.forEach((toggle) =>
+          toggle.removeEventListener("click", toggleMobileMenu),
+        );
+        mobileCloses.forEach((close) =>
+          close.removeEventListener("click", toggleMobileMenu),
+        );
+        mobileBackdrops.forEach((backdrop) =>
+          backdrop.removeEventListener("click", toggleMobileMenu),
+        );
+      };
+    }
+
+    let cleanup;
+    const init = () => {
+      if (cleanup) cleanup();
+      cleanup = setupScrollSpy();
+    };
+
+    // Use astro:page-load for Astro view transitions (if used), or DOMContentLoaded
+    document.addEventListener("astro:page-load", init);
+    if (
+      document.readyState === "complete" ||
+      document.readyState === "interactive"
+    ) {
+      init();
+    } else {
+      document.addEventListener("DOMContentLoaded", init);
+    }
+  })();
 </script>
 
 <style>
-	/* --- Desktop TOC --- */
-	.toc-desktop {
-		display: none;
-		position: sticky;
-		top: 5rem;
-		max-height: calc(100vh - 6rem);
-		padding-left: 1.5rem;
-		border-left: 1px solid var(--color-border);
-	}
+  /* --- Desktop TOC --- */
+  .toc-desktop {
+    display: none;
+    position: sticky;
+    top: 5rem;
+    max-height: calc(100vh - 6rem);
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--color-border);
+  }
 
-	.toc-reading-toggle {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		padding: 0.5rem 0.75rem;
-		margin-bottom: 1.5rem;
-		color: var(--color-ink-muted);
-		cursor: pointer;
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		transition: color 0.2s ease, background-color 0.2s ease;
-		border-radius: 6px;
-	}
+  .toc-reading-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-ink-muted);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+    border-radius: 6px;
+  }
 
-	.toc-reading-toggle:hover {
-		color: var(--color-ink);
-		background-color: var(--color-canvas-raised);
-	}
-	
-	body:has(#reading-mode:checked) .toc-reading-toggle {
-		background-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
-		color: var(--color-accent);
-	}
+  .toc-reading-toggle:hover {
+    color: var(--color-ink);
+    background-color: var(--color-canvas-raised);
+  }
 
-	@media (min-width: 1025px) {
-		.toc-desktop {
-			display: block;
-		}
-	}
+  body:has(#reading-mode:checked) .toc-reading-toggle {
+    background-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
+    color: var(--color-accent);
+  }
 
-	/* --- Shared TOC Scroll Area --- */
-	.toc-scroll-area {
-		overflow-y: auto;
-		scroll-behavior: smooth;
-		scrollbar-width: thin;
-		scrollbar-color: var(--color-border) transparent;
-		/* Fill available height in desktop, or fixed height in mobile Drawer */
-		height: 100%;
-		max-height: inherit;
-	}
+  @media (min-width: 1025px) {
+    .toc-desktop {
+      display: block;
+    }
+  }
 
-	.toc-desktop .toc-scroll-area {
-		padding-right: 1rem;
-	}
+  /* --- Shared TOC Scroll Area --- */
+  .toc-scroll-area {
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+    /* Fill available height in desktop, or fixed height in mobile Drawer */
+    height: 100%;
+    max-height: inherit;
+  }
 
-	/* --- Mobile TOC --- */
-	.toc-mobile-container {
-		display: block;
-	}
+  .toc-desktop .toc-scroll-area {
+    padding-right: 1rem;
+  }
 
-	@media (min-width: 1025px) {
-		.toc-mobile-container {
-			display: none;
-		}
-	}
+  /* --- Mobile TOC --- */
+  .toc-mobile-container {
+    display: block;
+  }
 
-	/* Modern Floating Capsule container */
-	.toc-mobile-capsule {
-		position: fixed;
-		bottom: 1.5rem;
-		left: 50%;
-		transform: translateX(-50%);
-		z-index: 90;
-		background-color: var(--color-canvas-raised);
-		border: 1px solid var(--color-border);
-		border-radius: 9999px; /* Pill shape */
-		display: flex;
-		align-items: stretch;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-		overflow: hidden;
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, opacity 0.3s ease;
-	}
-	
-	.toc-mobile-capsule:hover {
-		box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
-		transform: translateX(-50%) translateY(-2px);
-	}
+  @media (min-width: 1025px) {
+    .toc-mobile-container {
+      display: none;
+    }
+  }
 
-	.capsule-divider {
-		width: 1px;
-		background-color: var(--color-border);
-		margin: 0.5rem 0;
-	}
+  /* Modern Floating Capsule container */
+  .toc-mobile-capsule {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 90;
+    background-color: var(--color-canvas-raised);
+    border: 1px solid var(--color-border);
+    border-radius: 9999px; /* Pill shape */
+    display: flex;
+    align-items: stretch;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition:
+      transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.2s ease,
+      opacity 0.3s ease;
+  }
 
-	.toc-mobile-reading-mode {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.75rem 1.25rem 0.75rem 1.5rem;
-		color: var(--color-accent);
-		background: transparent;
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		cursor: pointer;
-		transition: color 0.2s ease, background-color 0.2s ease;
-		animation: reading-mode-pulse 0.75s ease-out 3s 2;
-	}
+  .toc-mobile-capsule:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+    transform: translateX(-50%) translateY(-2px);
+  }
 
-	.toc-mobile-reading-mode:hover {
-		color: var(--color-accent);
-		background-color: var(--color-canvas-subtle);
-	}
+  .capsule-divider {
+    width: 1px;
+    background-color: var(--color-border);
+    margin: 0.5rem 0;
+  }
 
-	body:has(#reading-mode:checked) .toc-mobile-reading-mode {
-		background-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
-		color: var(--color-accent);
-	}
+  .toc-mobile-reading-mode {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem 0.75rem 1.5rem;
+    color: var(--color-accent);
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+    animation: reading-mode-pulse 0.75s ease-out 3s 2;
+  }
 
-	@keyframes reading-mode-pulse {
-		0%   { background-color: transparent; }
-		50%  { background-color: color-mix(in srgb, var(--color-accent) 20%, transparent); }
-		100% { background-color: transparent; }
-	}
+  .toc-mobile-reading-mode:hover {
+    color: var(--color-accent);
+    background-color: var(--color-canvas-subtle);
+  }
 
-	.toc-mobile-toggle {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.75rem 1.25rem 0.75rem 1.5rem;
-		color: var(--color-ink);
-		background: transparent;
-		border: none;
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		cursor: pointer;
-		transition: color 0.2s ease, background-color 0.2s ease;
-	}
-	
-	.toc-mobile-top {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.75rem 1.25rem;
-		color: var(--color-ink-muted);
-		background: transparent;
-		border: none;
-		cursor: pointer;
-		transition: color 0.2s ease, background-color 0.2s ease;
-	}
+  body:has(#reading-mode:checked) .toc-mobile-reading-mode {
+    background-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
+    color: var(--color-accent);
+  }
 
-	.toc-mobile-toggle:hover,
-	.toc-mobile-top:hover,
-	.toc-mobile-toggle:focus,
-	.toc-mobile-top:focus {
-		color: var(--color-accent);
-		background-color: var(--color-canvas-subtle);
-		outline: none;
-	}
+  @keyframes reading-mode-pulse {
+    0% {
+      background-color: transparent;
+    }
+    50% {
+      background-color: color-mix(
+        in srgb,
+        var(--color-accent) 20%,
+        transparent
+      );
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
 
-	/* Overlay Backdrop */
-	.toc-mobile-backdrop {
-		position: fixed;
-		inset: 0;
-		background: rgba(0, 0, 0, 0.6);
-		backdrop-filter: blur(4px);
-		z-index: 98;
-		opacity: 0;
-		visibility: hidden;
-		transition: opacity 0.3s ease, visibility 0.3s ease;
-	}
+  .toc-mobile-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem 0.75rem 1.5rem;
+    color: var(--color-ink);
+    background: transparent;
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
 
-	.toc-mobile-backdrop.open {
-		opacity: 1;
-		visibility: visible;
-	}
+  .toc-mobile-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.25rem;
+    color: var(--color-ink-muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
 
-	/* Mobile Menu Drawer */
-	.toc-mobile-menu {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		z-index: 99;
-		background-color: var(--color-canvas);
-		border-top: 1px solid var(--color-border);
-		border-radius: 20px 20px 0 0;
-		padding: 1.5rem 1.5rem 3rem 1.5rem;
-		transform: translateY(100%);
-		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-		max-height: 85vh;
-		display: flex;
-		flex-direction: column;
-		box-shadow: 0 -10px 40px rgba(0,0,0,0.4);
-	}
+  .toc-mobile-toggle:hover,
+  .toc-mobile-top:hover,
+  .toc-mobile-toggle:focus,
+  .toc-mobile-top:focus {
+    color: var(--color-accent);
+    background-color: var(--color-canvas-subtle);
+    outline: none;
+  }
 
-	.toc-mobile-menu.open {
-		transform: translateY(0);
-	}
-	
-	.toc-mobile-close {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 2rem;
-		height: 2rem;
-		border-radius: 50%;
-		background: var(--color-canvas-raised);
-		border: 1px solid var(--color-border);
-		color: var(--color-ink-muted);
-		cursor: pointer;
-		transition: all 0.2s ease;
-	}
-	
-	.toc-mobile-close:hover,
-	.toc-mobile-close:focus {
-		color: var(--color-accent);
-		border-color: var(--color-accent);
-		background: transparent;
-		transform: scale(1.05);
-	}
+  /* Overlay Backdrop */
+  .toc-mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 98;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+  }
 
-	/* Shared UI Elements */
-	.toc-title {
-		font-family: var(--font-mono);
-		font-size: 0.6875rem;
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		color: var(--color-ink-faint);
-		margin: 0 0 0.75rem 0;
-	}
+  .toc-mobile-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+  }
 
-	.toc-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
+  /* Mobile Menu Drawer */
+  .toc-mobile-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    background-color: var(--color-canvas);
+    border-top: 1px solid var(--color-border);
+    border-radius: 20px 20px 0 0;
+    padding: 1.5rem 1.5rem 3rem 1.5rem;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4);
+  }
 
-	.toc-item {
-		margin-bottom: 0.375rem;
-	}
+  .toc-mobile-menu.open {
+    transform: translateY(0);
+  }
 
-	.toc-item--nested {
-		padding-left: 1rem;
-	}
+  .toc-mobile-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--color-canvas-raised);
+    border: 1px solid var(--color-border);
+    color: var(--color-ink-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
 
-	.toc-link {
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		color: var(--color-ink-muted);
-		text-decoration: none;
-		line-height: 1.5;
-		transition: color 0.2s ease, font-weight 0.2s ease;
-		display: block;
-	}
+  .toc-mobile-close:hover,
+  .toc-mobile-close:focus {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    background: transparent;
+    transform: scale(1.05);
+  }
 
-	.toc-link:hover,
-	.toc-link.active {
-		color: var(--color-accent);
-	}
+  /* Shared UI Elements */
+  .toc-title {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-ink-faint);
+    margin: 0 0 0.75rem 0;
+  }
 
-	.toc-link.active {
-		font-weight: 600;
-	}
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc-item {
+    margin-bottom: 0.375rem;
+  }
+
+  .toc-item--nested {
+    padding-left: 1rem;
+  }
+
+  .toc-link {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-ink-muted);
+    text-decoration: none;
+    line-height: 1.5;
+    transition:
+      color 0.2s ease,
+      font-weight 0.2s ease;
+    display: block;
+  }
+
+  .toc-link:hover,
+  .toc-link.active {
+    color: var(--color-accent);
+  }
+
+  .toc-link.active {
+    font-weight: 600;
+  }
 </style>

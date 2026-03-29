@@ -15,7 +15,6 @@ heroImage: ./populist-deep-state-hero.png
 
 > **TL;DR:** _We spent twenty years running away from the suffocating bureaucracy of SOAP, only to hand the launch keys to the ultimate chaotic frontman: the Large Language Model. Here is why the tech industry's silent "Deep State" is quietly bringing back the strict border controls of the early 2000s to save AI from itself—and why your 50-page system prompts are doomed to fail._
 
-
 If you want to understand why your brand-new AI agent might confidently hallucinate a command that can potentially wipe your production database, you have to look at how we govern our code and systems.
 
 We have a bad habit of falling in love with charismatic frontmen who promise to cut the red tape.

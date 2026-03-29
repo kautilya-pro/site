@@ -1,15 +1,15 @@
 {
-	"name": "kautilya-pro-site",
-	"compatibility_date": "2025-03-25",
-	"compatibility_flags": ["nodejs_compat"],
-	"assets": {
-		"directory": "./dist"
-	},
-	"d1_databases": [
-		{
-			"binding": "DB",
-			"database_name": "kautilya-blog-db",
-			"database_id": "a9e35687-d7b6-433a-af88-92d86444d2fd"
-		}
-	]
+  "name": "kautilya-pro-site",
+  "compatibility_date": "2025-03-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kautilya-blog-db",
+      "database_id": "a9e35687-d7b6-433a-af88-92d86444d2fd",
+    },
+  ],
 }

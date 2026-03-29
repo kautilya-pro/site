@@ -1,135 +1,190 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
-import NewsletterForm from '../../components/NewsletterForm.astro';
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+import NewsletterForm from "../../components/NewsletterForm.astro";
 
-const posts = (await getCollection('blog'))
-	.filter((post) => !post.data.draft && post.data.series === 'code-and-chaos')
-	.sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+const posts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft && post.data.series === "code-and-chaos")
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
 
 export const prerender = true;
 ---
 
-<BaseLayout title="Code and Chaos Series" description="An exploration of the fragile line between structured software systems and absolute entropy.">
-	<div class="series-dock-page">
-		<!-- Back Navigation -->
-		<nav class="back-nav mb-8">
-			<a href="/" class="back-link">&larr; Back to kautilya.pro</a>
-		</nav>
+<BaseLayout
+  title="Code and Chaos Series"
+  description="An exploration of the fragile line between structured software systems and absolute entropy."
+>
+  <div class="series-dock-page">
+    <!-- Back Navigation -->
+    <nav class="back-nav mb-8">
+      <a href="/" class="back-link">&larr; Back to kautilya.pro</a>
+    </nav>
 
-		<!-- Series Hero & Metadata -->
-		<header class="series-hero border-b border-[var(--color-border)] pb-8 mb-10">
-			<h1 class="series-title">#CodeAndChaos</h1>
-			<div class="mt-4 flex flex-col gap-3 items-start">
-				<span class="font-mono text-sm text-[var(--color-ink-muted)] p-3 bg-[var(--color-canvas-raised)] rounded-md border border-[var(--color-border)]">
-					<span class="font-semibold text-[var(--color-ink)]">Themes:</span> Systems Design, Tech History, Production Realities
-				</span>
-				<a href="/code-and-chaos/rss.xml" class="inline-flex items-center gap-1.5 font-mono text-xs text-[var(--color-ink-faint)] hover:text-[var(--color-accent)] transition-colors" aria-label="Subscribe to Code and Chaos RSS Feed" title="Subscribe via RSS">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="12" height="12">
-						<circle cx="6.18" cy="17.82" r="2.18"/>
-						<path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
-					</svg>
-					<span>subscribe via rss</span>
-				</a>
-			</div>
-		</header>
+    <!-- Series Hero & Metadata -->
+    <header
+      class="series-hero mb-10 border-b border-[var(--color-border)] pb-8"
+    >
+      <h1 class="series-title">#CodeAndChaos</h1>
+      <div class="mt-4 flex flex-col items-start gap-3">
+        <span
+          class="rounded-md border border-[var(--color-border)] bg-[var(--color-canvas-raised)] p-3 font-mono text-sm text-[var(--color-ink-muted)]"
+        >
+          <span class="font-semibold text-[var(--color-ink)]">Themes:</span> Systems
+          Design, Tech History, Production Realities
+        </span>
+        <a
+          href="/code-and-chaos/rss.xml"
+          class="inline-flex items-center gap-1.5 font-mono text-xs text-[var(--color-ink-faint)] transition-colors hover:text-[var(--color-accent)]"
+          aria-label="Subscribe to Code and Chaos RSS Feed"
+          title="Subscribe via RSS"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            width="12"
+            height="12"
+          >
+            <circle cx="6.18" cy="17.82" r="2.18"></circle>
+            <path
+              d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"
+            ></path>
+          </svg>
+          <span>subscribe via rss</span>
+        </a>
+      </div>
+    </header>
 
-		<!-- Manifesto -->
-		<section class="manifesto prose mb-16">
-			<p>
-				Software engineering is rarely a clean progression of logic. It is an ongoing war against entropy. We build pristine architectures on whiteboards, only to watch them collide with the chaotic realities of user unpredictability, scale, and shifting product requirements.
-			</p>
-			<p>
-				<em>#CodeAndChaos</em> is a series dedicated to that collision, with a lot of IYKYK satirical easter eggs. It’s about the pragmatic, often messy decisions required to build resilient systems at scale. It’s about acknowledging the chaos, containing it, and sometimes, learning to leverage it.
-			</p>
-		</section>
+    <!-- Manifesto -->
+    <section class="manifesto prose mb-16">
+      <p>
+        Software engineering is rarely a clean progression of logic. It is an
+        ongoing war against entropy. We build pristine architectures on
+        whiteboards, only to watch them collide with the chaotic realities of
+        user unpredictability, scale, and shifting product requirements.
+      </p>
+      <p>
+        <em>#CodeAndChaos</em> is a series dedicated to that collision, with a lot
+        of IYKYK satirical easter eggs. It’s about the pragmatic, often messy decisions
+        required to build resilient systems at scale. It’s about acknowledging the
+        chaos, containing it, and sometimes, learning to leverage it.
+      </p>
+    </section>
 
-		<!-- Index (Published Chapters) -->
-		<section class="published-index mb-16">
-			<h2 class="section-heading pb-2 border-b border-[var(--color-border)] mb-6">Index</h2>
-			<div class="posts-list space-y-8">
-				{posts.map((post, index) => (
-					<article class="post-card">
-						<header class="mb-2">
-							<h3 class="post-title font-serif text-xl font-bold text-[var(--color-ink)] mb-1">
-								<span class="opacity-40 mr-2 font-mono text-lg">0{index + 1}.</span> {post.data.title}
-							</h3>
-							<p class="post-meta font-mono text-xs text-[var(--color-ink-faint)]">
-								Published: <FormattedDate date={post.data.date} />
-							</p>
-						</header>
-						<p class="post-description text-[var(--color-ink-muted)] mb-3">
-							{post.data.description}
-						</p>
-						<a href={`/${post.data.series}/${post.data.permalinkSlug}/`} class="read-link font-mono text-sm text-[var(--color-accent)] hover:underline">
-							[Read Chapter {index + 1}] &rarr;
-						</a>
-					</article>
-				))}
-			</div>
-		</section>
+    <!-- Index (Published Chapters) -->
+    <section class="published-index mb-16">
+      <h2
+        class="section-heading mb-6 border-b border-[var(--color-border)] pb-2"
+      >
+        Index
+      </h2>
+      <div class="posts-list space-y-8">
+        {
+          posts.map((post, index) => (
+            <article class="post-card">
+              <header class="mb-2">
+                <h3 class="post-title mb-1 font-serif text-xl font-bold text-[var(--color-ink)]">
+                  <span class="mr-2 font-mono text-lg opacity-40">
+                    0{index + 1}.
+                  </span>{" "}
+                  {post.data.title}
+                </h3>
+                <p class="post-meta font-mono text-xs text-[var(--color-ink-faint)]">
+                  Published: <FormattedDate date={post.data.date} />
+                </p>
+              </header>
+              <p class="post-description mb-3 text-[var(--color-ink-muted)]">
+                {post.data.description}
+              </p>
+              <a
+                href={`/${post.data.series}/${post.data.permalinkSlug}/`}
+                class="read-link font-mono text-sm text-[var(--color-accent)] hover:underline"
+              >
+                [Read Chapter {index + 1}] &rarr;
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
 
-		<!-- Roadmap (Upcoming Chapters) -->
-		<section class="roadmap">
-			<h2 class="section-heading pb-2 border-b border-[var(--color-border)] mb-6">On the Roadmap <span class="text-sm font-normal text-[var(--color-ink-faint)]">(Working Titles)</span></h2>
-			<ul class="roadmap-list space-y-4 font-sans text-[var(--color-ink-muted)] list-none p-0 m-0">
-				<li class="roadmap-item flex items-baseline">
-					<span class="chapter-num font-mono opacity-50 mr-3">03.</span>
-					<span>The Unvetted Appointee (IAM & Root Keys) <span class="status-badge bg-yellow-500/10 text-yellow-600 border border-yellow-500/20">Drafting</span></span>
-				</li>
-			</ul>
-		</section>
+    <!-- Roadmap (Upcoming Chapters) -->
+    <section class="roadmap">
+      <h2
+        class="section-heading mb-6 border-b border-[var(--color-border)] pb-2"
+      >
+        On the Roadmap <span
+          class="text-sm font-normal text-[var(--color-ink-faint)]"
+          >(Working Titles)</span
+        >
+      </h2>
+      <ul
+        class="roadmap-list m-0 list-none space-y-4 p-0 font-sans text-[var(--color-ink-muted)]"
+      >
+        <li class="roadmap-item flex items-baseline">
+          <span class="chapter-num mr-3 font-mono opacity-50">03.</span>
+          <span
+            >The Unvetted Appointee (IAM & Root Keys) <span
+              class="status-badge border border-yellow-500/20 bg-yellow-500/10 text-yellow-600"
+              >Drafting</span
+            ></span
+          >
+        </li>
+      </ul>
+    </section>
 
-		<!-- Subscribe CTA -->
-		<section class="series-subscribe mt-16 p-8 bg-[var(--color-canvas-raised)] border border-[var(--color-border)] rounded-xl">
-			<NewsletterForm />
-		</section>
-	</div>
+    <!-- Subscribe CTA -->
+    <section
+      class="series-subscribe mt-16 rounded-xl border border-[var(--color-border)] bg-[var(--color-canvas-raised)] p-8"
+    >
+      <NewsletterForm />
+    </section>
+  </div>
 </BaseLayout>
 
 <style>
-	.series-dock-page {
-		max-width: var(--width-prose);
-		padding: 2rem 0;
-	}
+  .series-dock-page {
+    max-width: var(--width-prose);
+    padding: 2rem 0;
+  }
 
-	.back-link {
-		font-family: var(--font-mono);
-		font-size: 0.875rem;
-		color: var(--color-ink-faint);
-		text-decoration: none;
-		transition: color 0.2s ease;
-	}
+  .back-link {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-ink-faint);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
 
-	.back-link:hover {
-		color: var(--color-accent);
-	}
+  .back-link:hover {
+    color: var(--color-accent);
+  }
 
-	.series-title {
-		font-family: var(--font-serif);
-		font-size: 3rem;
-		font-weight: 800;
-		line-height: 1.1;
-		margin: 0;
-		color: var(--color-ink);
-	}
+  .series-title {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0;
+    color: var(--color-ink);
+  }
 
-	.section-heading {
-		font-family: var(--font-mono);
-		font-size: 1.25rem;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		color: var(--color-ink);
-	}
+  .section-heading {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-ink);
+  }
 
-	.status-badge {
-		font-size: 0.7rem;
-		font-family: var(--font-mono);
-		text-transform: uppercase;
-		padding: 0.15rem 0.4rem;
-		border-radius: 4px;
-		margin-left: 0.75rem;
-		vertical-align: middle;
-	}
+  .status-badge {
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    margin-left: 0.75rem;
+    vertical-align: middle;
+  }
 </style>

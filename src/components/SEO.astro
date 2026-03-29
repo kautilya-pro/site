@@ -1,73 +1,75 @@
 ---
-import { AUTHOR_NAME, AUTHOR_TWITTER_HANDLE } from '../consts';
+import { AUTHOR_NAME, AUTHOR_TWITTER_HANDLE } from "../consts";
 
 interface Props {
-	title: string;
-	description: string;
-	permalinkSlug?: string;
-	date?: Date;
-	updatedDate?: Date;
-	series?: string;
-	type?: 'website' | 'article';
+  title: string;
+  description: string;
+  permalinkSlug?: string;
+  date?: Date;
+  updatedDate?: Date;
+  series?: string;
+  type?: "website" | "article";
 }
 
-const {
-	title,
-	description,
-	date,
-	updatedDate,
-	type = 'website',
-} = Astro.props;
+const { title, description, date, updatedDate, type = "website" } = Astro.props;
 
-const isArticle = type === 'article';
+const isArticle = type === "article";
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 // Build JSON-LD schema
 const jsonLd: Record<string, unknown> = {
-	'@context': 'https://schema.org',
-	'@type': isArticle ? 'Article' : 'WebPage',
-	headline: title,
-	description: description,
-	url: canonicalURL.href,
-	author: {
-		'@type': 'Person',
-		name: AUTHOR_NAME,
-	},
-	publisher: {
-		'@type': 'Person',
-		name: AUTHOR_NAME,
-	},
-	mainEntityOfPage: {
-		'@type': 'WebPage',
-		'@id': canonicalURL.href,
-	},
+  "@context": "https://schema.org",
+  "@type": isArticle ? "Article" : "WebPage",
+  headline: title,
+  description: description,
+  url: canonicalURL.href,
+  author: {
+    "@type": "Person",
+    name: AUTHOR_NAME,
+  },
+  publisher: {
+    "@type": "Person",
+    name: AUTHOR_NAME,
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": canonicalURL.href,
+  },
 };
 
 if (date) {
-	jsonLd.datePublished = date.toISOString();
+  jsonLd.datePublished = date.toISOString();
 }
 
 if (updatedDate) {
-	jsonLd.dateModified = updatedDate.toISOString();
+  jsonLd.dateModified = updatedDate.toISOString();
 } else if (date) {
-	jsonLd.dateModified = date.toISOString();
+  jsonLd.dateModified = date.toISOString();
 }
 ---
 
-<!-- Article-specific OpenGraph -->
-{isArticle && date && (
-	<meta property="article:published_time" content={date.toISOString()} />
-)}
-{isArticle && updatedDate && (
-	<meta property="article:modified_time" content={updatedDate.toISOString()} />
-)}
-{isArticle && (
-	<meta property="article:author" content={AUTHOR_NAME} />
-)}
+<!-- Article-specific OpenGraph -->{
+  isArticle && date && (
+    <meta property="article:published_time" content={date.toISOString()} />
+  )
+}
+{
+  isArticle && updatedDate && (
+    <meta
+      property="article:modified_time"
+      content={updatedDate.toISOString()}
+    />
+  )
+}
+{isArticle && <meta property="article:author" content={AUTHOR_NAME} />}
 
 <!-- Twitter Creator -->
 <meta name="twitter:creator" content={AUTHOR_TWITTER_HANDLE} />
 <meta name="twitter:site" content={AUTHOR_TWITTER_HANDLE} />
 
 <!-- Schema.org JSON-LD -->
-<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(jsonLd)}
+/>

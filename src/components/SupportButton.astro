@@ -1,72 +1,74 @@
 ---
-import { BUY_ME_A_COFFEE_URL } from '../consts';
+import { BUY_ME_A_COFFEE_URL } from "../consts";
 ---
 
-<a 
-    href={BUY_ME_A_COFFEE_URL} 
-    target="_blank" 
-    rel="noopener noreferrer" 
-    class="support-btn"
+<a
+  href={BUY_ME_A_COFFEE_URL}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="support-btn"
 >
-    <div class="support-content">
-        <span class="emoji">☕</span>
-        <span class="title font-sans">Support my writing <span class="arrow">&rarr;</span></span>
-    </div>
+  <div class="support-content">
+    <span class="emoji">☕</span>
+    <span class="title font-sans"
+      >Support my writing <span class="arrow">&rarr;</span></span
+    >
+  </div>
 </a>
 
 <style>
-    .support-btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-decoration: none;
-        padding: 0.85rem 1.25rem;
-        border-radius: 8px;
-        background: var(--reading-accent-tint, var(--color-canvas-raised));
-        border: 1px solid var(--reading-border, var(--color-border));
-        color: var(--reading-fg, var(--color-ink));
-        transition: all 0.2s;
-        width: 100%;
-    }
+  .support-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    padding: 0.85rem 1.25rem;
+    border-radius: 8px;
+    background: var(--reading-accent-tint, var(--color-canvas-raised));
+    border: 1px solid var(--reading-border, var(--color-border));
+    color: var(--reading-fg, var(--color-ink));
+    transition: all 0.2s;
+    width: 100%;
+  }
 
-    .support-btn:hover {
-        transform: translateY(-2px);
-        background: var(--reading-bg, var(--color-canvas));
-        border-color: var(--color-accent);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
+  .support-btn:hover {
+    transform: translateY(-2px);
+    background: var(--reading-bg, var(--color-canvas));
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
 
-    .support-btn:active {
-        transform: translateY(0);
-    }
+  .support-btn:active {
+    transform: translateY(0);
+  }
 
-    .support-content {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-    }
+  .support-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
 
-    .emoji {
-        font-size: 1.25rem;
-        line-height: 1;
-    }
+  .emoji {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
 
-    .title {
-        font-weight: 600;
-        font-size: 1rem;
-        color: var(--reading-fg, var(--color-ink));
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
+  .title {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--reading-fg, var(--color-ink));
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
 
-    .arrow {
-        color: var(--color-accent);
-        transition: transform 0.2s;
-    }
+  .arrow {
+    color: var(--color-accent);
+    transition: transform 0.2s;
+  }
 
-    .support-btn:hover .arrow {
-        transform: translateX(4px);
-    }
+  .support-btn:hover .arrow {
+    transform: translateX(4px);
+  }
 </style>

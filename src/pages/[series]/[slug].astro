@@ -1,24 +1,24 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import BlogPost from "../../layouts/BlogPost.astro";
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts
-		.filter((post) => !post.data.draft)
-		.map((post) => ({
-			params: {
-				series: post.data.series,
-				slug: post.data.permalinkSlug,
-			},
-			props: { post },
-		}));
+  const posts = await getCollection("blog");
+  return posts
+    .filter((post) => !post.data.draft)
+    .map((post) => ({
+      params: {
+        series: post.data.series,
+        slug: post.data.permalinkSlug,
+      },
+      props: { post },
+    }));
 }
 
 interface Props {
-	post: CollectionEntry<'blog'>;
+  post: CollectionEntry<"blog">;
 }
 
 const { post } = Astro.props;
@@ -26,14 +26,14 @@ const { Content, headings } = await render(post);
 ---
 
 <BlogPost
-	title={post.data.title}
-	description={post.data.description}
-	date={post.data.date}
-	updatedDate={post.data.updatedDate}
-	series={post.data.series}
-	permalinkSlug={post.data.permalinkSlug}
-	heroImage={post.data.heroImage}
-	headings={headings}
+  title={post.data.title}
+  description={post.data.description}
+  date={post.data.date}
+  updatedDate={post.data.updatedDate}
+  series={post.data.series}
+  permalinkSlug={post.data.permalinkSlug}
+  heroImage={post.data.heroImage}
+  headings={headings}
 >
-	<Content />
+  <Content />
 </BlogPost>
