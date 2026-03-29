@@ -20,8 +20,17 @@ export const prerender = true;
 		<!-- Series Hero & Metadata -->
 		<header class="series-hero border-b border-[var(--color-border)] pb-8 mb-10">
 			<h1 class="series-title">#CodeAndChaos</h1>
-			<div class="series-metadata font-mono text-sm text-[var(--color-ink-muted)] mt-4 p-3 bg-[var(--color-canvas-raised)] rounded-md inline-block border border-[var(--color-border)]">
-				<span class="font-semibold text-[var(--color-ink)]">Themes:</span> Systems Design, Tech History, Production Realities
+			<div class="mt-4 flex flex-col gap-3 items-start">
+				<span class="font-mono text-sm text-[var(--color-ink-muted)] p-3 bg-[var(--color-canvas-raised)] rounded-md border border-[var(--color-border)]">
+					<span class="font-semibold text-[var(--color-ink)]">Themes:</span> Systems Design, Tech History, Production Realities
+				</span>
+				<a href="/code-and-chaos/rss.xml" class="inline-flex items-center gap-1.5 font-mono text-xs text-[var(--color-ink-faint)] hover:text-[var(--color-accent)] transition-colors" aria-label="Subscribe to Code and Chaos RSS Feed" title="Subscribe via RSS">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="12" height="12">
+						<circle cx="6.18" cy="17.82" r="2.18"/>
+						<path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
+					</svg>
+					<span>subscribe via rss</span>
+				</a>
 			</div>
 		</header>
 

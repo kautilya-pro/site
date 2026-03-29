@@ -18,6 +18,10 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 		<>
 			{/* Desktop Sidebar TOC */}
 			<nav aria-label="Table of Contents (Desktop)" class="toc-desktop">
+				<label for="reading-mode" class="toc-reading-toggle" aria-label="Toggle reading mode">
+					<span aria-hidden="true">📖</span>
+					Reading mode
+				</label>
 				<p class="toc-title">On this page</p>
 				<div class="toc-scroll-area">
 					<ul class="toc-list">
@@ -49,6 +53,11 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 			<div class="toc-mobile-container">
 				<!-- Modern Floating Capsule -->
 				<div class="toc-mobile-capsule">
+					<label for="reading-mode" class="toc-mobile-reading-mode" aria-label="Toggle reading mode">
+						<span aria-hidden="true">📖</span>
+						<span>Read</span>
+					</label>
+					<div class="capsule-divider"></div>
 					<button 
 						type="button" 
 						class="toc-mobile-toggle"
@@ -262,6 +271,33 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 		border-left: 1px solid var(--color-border);
 	}
 
+	.toc-reading-toggle {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.5rem 0.75rem;
+		margin-bottom: 1.5rem;
+		color: var(--color-ink-muted);
+		cursor: pointer;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		transition: color 0.2s ease, background-color 0.2s ease;
+		border-radius: 6px;
+	}
+
+	.toc-reading-toggle:hover {
+		color: var(--color-ink);
+		background-color: var(--color-canvas-raised);
+	}
+	
+	body:has(#reading-mode:checked) .toc-reading-toggle {
+		background-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
+		color: var(--color-accent);
+	}
+
 	@media (min-width: 1025px) {
 		.toc-desktop {
 			display: block;
@@ -320,6 +356,39 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 		width: 1px;
 		background-color: var(--color-border);
 		margin: 0.5rem 0;
+	}
+
+	.toc-mobile-reading-mode {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.75rem 1.25rem 0.75rem 1.5rem;
+		color: var(--color-accent);
+		background: transparent;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		cursor: pointer;
+		transition: color 0.2s ease, background-color 0.2s ease;
+		animation: reading-mode-pulse 0.75s ease-out 3s 2;
+	}
+
+	.toc-mobile-reading-mode:hover {
+		color: var(--color-accent);
+		background-color: var(--color-canvas-subtle);
+	}
+
+	body:has(#reading-mode:checked) .toc-mobile-reading-mode {
+		background-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
+		color: var(--color-accent);
+	}
+
+	@keyframes reading-mode-pulse {
+		0%   { background-color: transparent; }
+		50%  { background-color: color-mix(in srgb, var(--color-accent) 20%, transparent); }
+		100% { background-color: transparent; }
 	}
 
 	.toc-mobile-toggle {

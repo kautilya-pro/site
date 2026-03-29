@@ -46,8 +46,12 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 			permalinkSlug={permalinkSlug}
 			type="article"
 		/>
+		<link rel="alternate" type="application/rss+xml" title={`${series} RSS Feed`} href={`/${series}/rss.xml`} />
 	</head>
 	<body>
+		<!-- CSS-only Reading Mode toggle (unchecked = dark shell, checked = reading surface) -->
+		<input type="checkbox" id="reading-mode" class="sr-only" />
+
 		<!-- Scroll-driven reading progress bar -->
 		<div class="reading-progress-bar" aria-hidden="true"></div>
 
@@ -93,16 +97,14 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 				</header>
 
 				{heroImage && (
-					<div class="article-hero-image mb-8">
-						<Image 
-							src={heroImage} 
-							alt={`Hero image for ${title}`} 
-							class="w-full h-auto rounded-xl shadow-sm border border-[var(--color-border)]" 
-							loading="eager" 
-							fetchpriority="high" 
-							decoding="async"
-						/>
-					</div>
+					<Image 
+						src={heroImage} 
+						alt={`Hero image for ${title}`} 
+						class="article-hero-image w-full h-auto rounded-xl shadow-sm border border-[var(--color-border)]" 
+						loading="eager" 
+						fetchpriority="high" 
+						decoding="async"
+					/>
 				)}
 
 				<hr class="article-divider" />
@@ -171,7 +173,7 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 		top: 0;
 		inset-inline: 0;
 		height: 3px;
-		background: light-dark(#2563eb, #60a5fa);
+		background: var(--color-accent);
 		transform-origin: left;
 		transform: scaleX(0);
 		z-index: 9999;
@@ -179,6 +181,10 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 		/* Scroll-driven animation (Chromium 115+, graceful degradation) */
 		animation: progress-grow linear;
 		animation-timeline: scroll(root);
+	}
+
+	body:has(#reading-mode:checked) .reading-progress-bar {
+		background: light-dark(#2563eb, #60a5fa);
 	}
 
 	/* ── Grid Layout ── */
@@ -191,8 +197,14 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 		padding: 3rem 1.5rem;
 	}
 
-	/* ── Article Container — Theme-Aware Reading Surface ── */
+	/* ── Article Container ── */
 	.article-content {
+		min-width: 0;
+		max-width: 65ch;
+		margin-inline: auto;
+	}
+
+	body:has(#reading-mode:checked) .article-content {
 		color-scheme: light dark;
 
 		/* Reading palette (scoped) */
@@ -209,16 +221,12 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 			rgba(255, 255, 255, 0.08)
 		);
 
-		min-width: 0;
-		max-width: 65ch;
-		margin-inline: auto;
-
 		/* Solid background — NO textures, NO background-image */
 		background-color: var(--reading-bg);
 		background-image: none !important;
 		color: var(--reading-fg);
 
-		/* Subtle padding to visually separate from grid texture */
+		/* Card-like reading surface */
 		padding: 2rem 2.5rem;
 		border-radius: 12px;
 	}
@@ -228,51 +236,46 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 		margin-bottom: 2rem;
 	}
 
-	.article-meta {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		margin-bottom: 1rem;
-		flex-wrap: wrap;
-	}
-
-	.meta-separator {
-		color: var(--reading-muted);
-	}
-
-	.updated-label {
-		font-family: var(--font-mono);
-		font-size: 0.8125rem;
-		color: var(--reading-muted);
-		font-style: italic;
+	/* ── Hero Image ── */
+	body:has(#reading-mode:checked) .article-hero-image {
+		/* Break out of .article-content's 2.5rem horizontal padding */
+		width: calc(100% + 5rem);
+		max-width: none;
+		margin-inline: -2.5rem;
+		border-radius: 0;
+		border-left: none;
+		border-right: none;
 	}
 
 	.article-title {
-		font-family: 'Inter', var(--font-sans);
-		font-size: 2.5rem;
-		line-height: 1.15;
 		margin-bottom: 0.75rem;
+	}
+	body:has(#reading-mode:checked) .article-title {
+		font-family: 'Inter', var(--font-sans);
+		line-height: 1.15;
 		letter-spacing: -0.025em;
 		color: var(--reading-fg);
 		text-wrap: balance;
 	}
 
 	.article-description {
+		color: var(--color-ink-muted);
+		margin: 0;
+	}
+	body:has(#reading-mode:checked) .article-description {
 		font-family: 'Lora', var(--font-serif);
 		font-size: 1.125rem;
 		color: var(--reading-muted);
 		line-height: 1.6;
-		margin: 0;
 	}
 
-	.article-divider {
-		border: none;
+	body:has(#reading-mode:checked) .article-divider {
 		border-top: 1px solid var(--reading-border);
 		margin: 2.5rem 0;
 	}
 
 	/* ── Prose — Typography & Rhythm ── */
-	.prose {
+	body:has(#reading-mode:checked) .prose {
 		font-family: 'Lora', var(--font-serif);
 		font-size: clamp(1.125rem, 1vw + 1rem, 1.25rem);
 		line-height: 1.75;
@@ -291,23 +294,20 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 		--tw-prose-hr: var(--reading-border);
 	}
 
-	/* Headings: Inter sans-serif */
-	.prose :where(h1, h2, h3, h4, h5, h6) {
+	body:has(#reading-mode:checked) .prose :where(h1, h2, h3, h4, h5, h6) {
 		font-family: 'Inter', var(--font-sans);
-		color: var(--reading-fg);
 	}
 
-	.prose :where(h1, h2, h3) {
+	body:has(#reading-mode:checked) .prose :where(h1, h2, h3) {
 		text-wrap: balance;
 	}
 
 	/* Paragraphs */
-	.prose :where(p) {
+	body:has(#reading-mode:checked) .prose :where(p) {
 		text-wrap: pretty;
 	}
 
-	/* Links */
-	.prose :where(a) {
+	body:has(#reading-mode:checked) .prose :where(a) {
 		color: var(--reading-accent);
 		text-decoration: underline;
 		text-underline-offset: 3px;
@@ -315,13 +315,13 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 		transition: text-decoration-color 0.2s var(--ease-out-expo);
 	}
 
-	.prose :where(a:hover) {
+	body:has(#reading-mode:checked) .prose :where(a:hover) {
 		text-decoration-color: var(--reading-accent);
 	}
 
 	/* ── Drop Cap — First paragraph + first paragraph after h2 ── */
-	.prose > p:first-of-type::first-letter,
-	.prose > h2 + p::first-letter {
+	body:has(#reading-mode:checked) .prose > p:first-of-type::first-letter,
+	body:has(#reading-mode:checked) .prose > h2 + p::first-letter {
 		font-family: 'Inter', var(--font-sans);
 		float: left;
 		font-size: 3.2em;
@@ -333,7 +333,7 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 	}
 
 	/* ── Blockquotes — Rich styling ── */
-	.prose :where(blockquote) {
+	body:has(#reading-mode:checked) .prose :where(blockquote) {
 		border-left: 4px solid var(--reading-accent);
 		background: var(--reading-accent-tint);
 		padding: 1rem 1.25rem;
@@ -342,8 +342,7 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 		font-style: italic;
 		color: var(--reading-muted);
 	}
-
-	.prose :where(blockquote p) {
+	body:has(#reading-mode:checked) .prose :where(blockquote p) {
 		margin: 0;
 	}
 
@@ -358,9 +357,11 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 	}
 
 	.comments-title {
-		font-family: 'Inter', var(--font-sans);
 		font-size: 1.25rem;
 		margin-bottom: 1rem;
+	}
+	body:has(#reading-mode:checked) .comments-title {
+		font-family: 'Inter', var(--font-sans);
 		color: var(--reading-fg);
 	}
 
@@ -373,8 +374,18 @@ const { title, description, date, updatedDate, series, permalinkSlug, heroImage,
 
 		.article-content {
 			width: 100%;
+		}
+
+		/* Adjust padding for mobile in reader mode to prevent squishing */
+		body:has(#reading-mode:checked) .article-content {
 			padding: 1.5rem 1rem;
 			border-radius: 0;
+		}
+
+		/* Re-adjust hero image breakout for the new 1rem mobile padding */
+		body:has(#reading-mode:checked) .article-hero-image {
+			width: calc(100% + 2rem);
+			margin-inline: -1rem;
 		}
 
 		.article-sidebar {
