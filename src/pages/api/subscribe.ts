@@ -27,19 +27,29 @@ export const POST: APIRoute = async ({ request }) => {
         }
 
         // 2. Validate Turnstile
-        const turnstileSecret = TURNSTILE_SECRET_KEY; 
+        // Check Cloudflare actual runtime env first, falback to Astro injected. This guarantees Prod keys work.
+        const turnstileSecret = env.TURNSTILE_SECRET_KEY || TURNSTILE_SECRET_KEY; 
         
-        const turnstileData = new FormData();
+        const turnstileData = new URLSearchParams();
         turnstileData.append('secret', turnstileSecret);
         turnstileData.append('response', turnstileToken);
 
+        const ip = request.headers.get('CF-Connecting-IP');
+        if (ip) {
+            turnstileData.append('remoteip', ip);
+        }
+
         const turnstileRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
             method: 'POST',
-            body: turnstileData
+            body: turnstileData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
         });
         const turnstileOutcome = (await turnstileRes.json()) as Record<string, any>;
 
         if (!turnstileOutcome.success) {
+            console.error('Turnstile Siteverify Failed:', turnstileOutcome);
             return new Response(JSON.stringify({ success: false, error: 'Captcha verification failed' }), { status: 400 });
         }
 
